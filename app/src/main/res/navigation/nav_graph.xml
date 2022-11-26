@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/gameMenu">
+
+    <fragment
+        android:id="@+id/gameMenu"
+        android:name="fr.epita.android.kingofelysee.GameMenu"
+        android:label="fragment_game_menu"
+        tools:layout="@layout/fragment_game_menu" >
+        <action
+            android:id="@+id/action_gameMenu_to_gameCharacterChoice"
+            app:destination="@id/gameCharacterChoice" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameCharacterChoice"
+        android:name="fr.epita.android.kingofelysee.GameCharacterChoice"
+        android:label="fragment_game_character_choice"
+        tools:layout="@layout/fragment_game_character_choice" />
+</navigation>

@@ -8,8 +8,5 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Replace the FrameLayout of the main activity with the Menu
-        val gameMenu = GameMenu()
-        supportFragmentManager.beginTransaction().replace(R.id.main_container, gameMenu).commit()
     }
 }
