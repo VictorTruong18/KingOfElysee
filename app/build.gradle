@@ -32,6 +32,9 @@ android {
     }
 }
 
+ext.lifecycle_version = "2.5.1"
+ext.fragment_version = "1.5.3"
+
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -45,4 +48,6 @@ dependencies {
     def nav_version = "2.5.2"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
+    implementation("androidx.fragment:fragment-ktx:$fragment_version")
 }

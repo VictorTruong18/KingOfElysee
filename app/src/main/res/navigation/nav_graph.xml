@@ -18,5 +18,14 @@
         android:id="@+id/gameCharacterChoice"
         android:name="fr.epita.android.kingofelysee.GameCharacterChoice"
         android:label="fragment_game_character_choice"
-        tools:layout="@layout/fragment_game_character_choice" />
+        tools:layout="@layout/fragment_game_character_choice" >
+        <action
+            android:id="@+id/action_gameCharacterChoice_to_gameBoard"
+            app:destination="@id/gameBoard" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameBoard"
+        android:name="fr.epita.android.kingofelysee.GameBoard"
+        android:label="fragment_game_board"
+        tools:layout="@layout/fragment_game_board" />
 </navigation>
