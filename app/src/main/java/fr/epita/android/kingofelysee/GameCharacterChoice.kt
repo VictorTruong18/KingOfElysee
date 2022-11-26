@@ -9,6 +9,7 @@ import android.widget.ImageView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import fr.epita.android.kingofelysee.objects.Character
 
 
 class GameCharacterChoice : Fragment() {
@@ -35,27 +36,45 @@ class GameCharacterChoice : Fragment() {
         val pecressImageView : ImageView = view.findViewById(R.id.pecress_img)
 
         macronImage.setOnClickListener {
-            gameBrain.chooseCharacter("Macron")
+            val userCharacter : Character = Character(
+                name = "Macron", image = "@drawable/macron", isThePlayer = true
+            )
+            gameBrain.chooseCharacter(userCharacter)
             findNavController().navigate(R.id.action_gameCharacterChoice_to_gameBoard)
         }
         lepenImage.setOnClickListener {
-            gameBrain.chooseCharacter("LePen")
+            val userCharacter : Character = Character(
+                name = "Lepen", image = "@drawable/lepen", isThePlayer = true
+            )
+            gameBrain.chooseCharacter(userCharacter)
             findNavController().navigate(R.id.action_gameCharacterChoice_to_gameBoard)
         }
         melenchonImage.setOnClickListener {
-            gameBrain.chooseCharacter("Melenchon")
+            val userCharacter : Character = Character(
+                name = "Melenchon", image = "@drawable/melenchon", isThePlayer = true
+            )
+            gameBrain.chooseCharacter(userCharacter)
             findNavController().navigate(R.id.action_gameCharacterChoice_to_gameBoard)
         }
         hidalgoImage.setOnClickListener {
-            gameBrain.chooseCharacter("Hidalgo")
+            val userCharacter : Character = Character(
+                name = "Hidalgo", image = "@drawable/hidalgo", isThePlayer = true
+            )
+            gameBrain.chooseCharacter(userCharacter)
             findNavController().navigate(R.id.action_gameCharacterChoice_to_gameBoard)
         }
         lasalleImage.setOnClickListener {
-            gameBrain.chooseCharacter("Lasalle")
+            val userCharacter : Character = Character(
+                name = "Lasalle", image = "@drawable/lasalle", isThePlayer = true
+            )
+            gameBrain.chooseCharacter(userCharacter)
             findNavController().navigate(R.id.action_gameCharacterChoice_to_gameBoard)
         }
         pecressImageView.setOnClickListener {
-            gameBrain.chooseCharacter("Pecress")
+            val userCharacter : Character = Character(
+                name = "Pecresse", image = "@drawable/pecresse", isThePlayer = true
+            )
+            gameBrain.chooseCharacter(userCharacter)
             findNavController().navigate(R.id.action_gameCharacterChoice_to_gameBoard)
         }
 

@@ -28,8 +28,8 @@ class GameBoard : Fragment() {
 
         var textView : TextView = view.findViewById(R.id.textView)
 
-        textView.text = gameBrain.chosenCharacter
-        print(gameBrain.chosenCharacter)
+        textView.text = gameBrain.character.name_
+
         return view
     }
 

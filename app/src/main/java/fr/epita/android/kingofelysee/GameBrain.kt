@@ -1,11 +1,12 @@
 package fr.epita.android.kingofelysee
 
 import androidx.lifecycle.ViewModel
+import fr.epita.android.kingofelysee.objects.Character
 
 class GameBrain : ViewModel()  {
-    var chosenCharacter : String = ""
+    lateinit var character : Character
 
-    fun chooseCharacter(characterName : String){
-        this.chosenCharacter = characterName
+    fun chooseCharacter(character : Character){
+        this.character = character
     }
 }
