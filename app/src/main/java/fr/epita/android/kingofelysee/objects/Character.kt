@@ -1,15 +1,15 @@
 package fr.epita.android.kingofelysee.objects
 
-val LIFE_POINTS = 10
-val ENERGY_POINTS = 10
+val LIFE_POINTS = 5
+val ENERGY_POINTS = 0
 
 class Character(
     name: String,
-    image: String,
+    image: Int,
     isThePlayer: Boolean
 ) {
     val name_ : String = name
-    val image_ : String = image
+    val image_ : Int = image
     val isThePlayer_ : Boolean = isThePlayer
 
     var lifePoints_ : Int = LIFE_POINTS

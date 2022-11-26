@@ -12,11 +12,8 @@ import androidx.fragment.app.viewModels
 
 class GameBoard : Fragment() {
 
-    private val gameBrain : GameBrain by activityViewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -25,11 +22,6 @@ class GameBoard : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view : View =inflater.inflate(R.layout.fragment_game_board, container, false)
-
-        var textView : TextView = view.findViewById(R.id.textView)
-
-        textView.text = gameBrain.character.name_
-
         return view
     }
 
