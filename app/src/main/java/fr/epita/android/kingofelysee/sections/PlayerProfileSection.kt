@@ -14,8 +14,13 @@ import fr.epita.android.kingofelysee.R
 import org.w3c.dom.Text
 
 
+
 class PlayerProfileSection : Fragment() {
     private val gameBrain : GameBrain by activityViewModels()
+    lateinit var textView : TextView
+    lateinit var imageView : ImageView
+    lateinit var energyTextView : TextView
+    lateinit var lifeTextView : TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,17 +28,16 @@ class PlayerProfileSection : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view : View =inflater.inflate(R.layout.fragment_player_profile_section, container, false)
-        var textView : TextView = view.findViewById(R.id.name_tv)
-        var imageView : ImageView = view.findViewById(R.id.image_img)
-        var energyTextView : TextView = view.findViewById(R.id.energypoints_tv)
-        var lifeTextView : TextView = view.findViewById(R.id.lifepoints_tv)
-        textView.text = gameBrain.player.name_
-        imageView.setImageResource(gameBrain.player.image_)
-        energyTextView.text = gameBrain.player.energyPoints_.toString()
-        lifeTextView.text = gameBrain.player.lifePoints_.toString()
+        textView = view.findViewById(R.id.name_tv)
+        imageView  = view.findViewById(R.id.image_img)
+        energyTextView = view.findViewById(R.id.energypoints_tv)
+        lifeTextView = view.findViewById(R.id.lifepoints_tv)
+        this.textView.text = gameBrain.player.name_
+        this.imageView.setImageResource(gameBrain.player.image_)
+        this.energyTextView.text = gameBrain.player.energyPoints_.toString()
+        this.lifeTextView.text = gameBrain.player.lifePoints_.toString()
 
         return view
     }
-
 
 }
