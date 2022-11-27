@@ -5,12 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 
 
 class GameBoard : Fragment() {
+
+    private val gameBrain : GameBrain by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +25,12 @@ class GameBoard : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view : View =inflater.inflate(R.layout.fragment_game_board, container, false)
+
+        val incrementButton : Button = view.findViewById(R.id.life_inc_btn)
+
+        incrementButton.setOnClickListener{
+            gameBrain.player.incrementLifePoints(1)
+        }
         return view
     }
 

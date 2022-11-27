@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import fr.epita.android.kingofelysee.GameBrain
 import fr.epita.android.kingofelysee.R
 import org.w3c.dom.Text
@@ -28,16 +29,31 @@ class PlayerProfileSection : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view : View =inflater.inflate(R.layout.fragment_player_profile_section, container, false)
+
+
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         textView = view.findViewById(R.id.name_tv)
         imageView  = view.findViewById(R.id.image_img)
         energyTextView = view.findViewById(R.id.energypoints_tv)
         lifeTextView = view.findViewById(R.id.lifepoints_tv)
+
+
+
         this.textView.text = gameBrain.player.name_
         this.imageView.setImageResource(gameBrain.player.image_)
-        this.energyTextView.text = gameBrain.player.energyPoints_.toString()
-        this.lifeTextView.text = gameBrain.player.lifePoints_.toString()
 
-        return view
+        gameBrain.player.lifePoints_.observe(viewLifecycleOwner, Observer {
+            this.lifeTextView.text = gameBrain.player.lifePointsString()
+        })
+
+        gameBrain.player.energyPoints_.observe(viewLifecycleOwner, Observer {
+            this.energyTextView.text = gameBrain.player.energyPointsString()
+        })
     }
 
 }
