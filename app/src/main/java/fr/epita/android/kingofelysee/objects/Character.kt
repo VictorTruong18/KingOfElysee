@@ -1,6 +1,6 @@
 package fr.epita.android.kingofelysee.objects
 
-val LIFE_POINTS = 5
+val LIFE_POINTS = 10
 val ENERGY_POINTS = 0
 
 class Character(
