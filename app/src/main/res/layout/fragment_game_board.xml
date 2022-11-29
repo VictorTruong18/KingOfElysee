@@ -5,13 +5,19 @@
     android:id="@+id/game_board"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#1D1E25"
     tools:context=".GameBoard">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/playerProfilSection"
+        android:id="@+id/profile_0"
         android:name="fr.epita.android.kingofelysee.sections.PlayerProfileSection"
-        android:layout_width="410dp"
-        android:layout_height="104dp"
+        android:layout_width="0dp"
+        android:layout_height="128dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/mainFragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,16 +25,144 @@
         tools:layout="@layout/fragment_player_profile_section" />
 
     <Button
-        android:id="@+id/life_inc_btn"
+        android:id="@+id/mycards_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="increment_life"
+        android:text="Mes cartes"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/shop_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/game_status" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/mainFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_0"
+        tools:layout="@layout/fragment_map" />
+
+    <HorizontalScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="136dp"
+        android:layout_marginBottom="128dp"
+        android:clipToPadding="true"
+        android:contentDescription="List of other players"
+        android:scrollbars="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/profile_1"
+                android:name="fr.epita.android.kingofelysee.sections.PlayerProfileSection"
+                android:layout_width="320dp"
+                android:layout_height="128dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout="@layout/fragment_player_profile_section" />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/profile_2"
+                android:name="fr.epita.android.kingofelysee.sections.PlayerProfileSection"
+                android:layout_width="320dp"
+                android:layout_height="128dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/profile_1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5"
+                tools:layout="@layout/fragment_player_profile_section" />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/profile_3"
+                android:name="fr.epita.android.kingofelysee.sections.PlayerProfileSection"
+                android:layout_width="320dp"
+                android:layout_height="128dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/profile_2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:layout="@layout/fragment_player_profile_section" />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/profile_4"
+                android:name="fr.epita.android.kingofelysee.sections.PlayerProfileSection"
+                android:layout_width="320dp"
+                android:layout_height="128dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/profile_3"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:layout="@layout/fragment_player_profile_section" />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/profile_5"
+                android:name="fr.epita.android.kingofelysee.sections.PlayerProfileSection"
+                android:layout_width="320dp"
+                android:layout_height="128dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/profile_4"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:layout="@layout/fragment_player_profile_section" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </HorizontalScrollView>
+
+    <Button
+        android:id="@+id/shop_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="boutique"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/mycards_button"
+        app:layout_constraintTop_toBottomOf="@+id/game_status" />
+
+    <Button
+        android:id="@+id/quit_shop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quitter"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playerProfilSection"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintTop_toBottomOf="@+id/game_status" />
+
+    <TextView
+        android:id="@+id/game_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="À l'adversaire de jouer"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
     <Button
         android:id="@+id/navToDiceButton"

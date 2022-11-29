@@ -3,16 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:background="#48272121"
+    android:layout_height="match_parent"
+    android:background="@drawable/card_bg"
     tools:context="sections.PlayerProfileSection">
 
-
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/image_img"
-        android:layout_width="97dp"
-        android:layout_height="98dp"
+        android:layout_width="92dp"
+        android:layout_height="92dp"
+        android:layout_marginStart="16dp"
         android:contentDescription="TODO"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/rounded_corner_sm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,52 +26,83 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="-72dp"
+        android:layout_marginEnd="8dp"
         android:text="Lounes Maureaux"
-        android:textSize="10sp"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_img"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5" />
 
     <ImageView
         android:id="@+id/heart_img"
-        android:layout_width="44dp"
-        android:layout_height="19dp"
-        android:layout_marginEnd="10dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="12dp"
         android:src="@drawable/heart"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/energypoints_tv"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintEnd_toStartOf="@+id/energy_img"
+        app:layout_constraintStart_toEndOf="@+id/image_img"
+        app:layout_constraintTop_toBottomOf="@+id/name_tv"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/lifepoints_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:text="10"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/heart_img"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/heart_img"
+        app:layout_constraintStart_toStartOf="@+id/heart_img"
+        app:layout_constraintTop_toBottomOf="@+id/heart_img" />
 
     <ImageView
         android:id="@+id/energy_img"
-        android:layout_width="33dp"
-        android:layout_height="25dp"
-        android:layout_marginEnd="50dp"
-        android:src="@drawable/lightning"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/euro"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintStart_toEndOf="@+id/image_img"
+        app:layout_constraintTop_toBottomOf="@+id/name_tv" />
 
     <TextView
         android:id="@+id/energypoints_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:text="10"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/energy_img"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/energy_img"
+        app:layout_constraintStart_toStartOf="@+id/energy_img"
+        app:layout_constraintTop_toBottomOf="@+id/energy_img" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/vote"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/energy_img"
+        app:layout_constraintTop_toBottomOf="@+id/name_tv" />
+
+    <TextView
+        android:id="@+id/victorypoints_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="0"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 </androidx.constraintlayout.widget.ConstraintLayout>

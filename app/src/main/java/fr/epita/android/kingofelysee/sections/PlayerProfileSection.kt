@@ -1,5 +1,7 @@
 package fr.epita.android.kingofelysee.sections
 
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.media.Image
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,8 +14,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import fr.epita.android.kingofelysee.GameBrain
 import fr.epita.android.kingofelysee.R
-import org.w3c.dom.Text
-
+import android.graphics.Paint;
+import android.graphics.Typeface
 
 
 class PlayerProfileSection : Fragment() {
@@ -22,6 +24,8 @@ class PlayerProfileSection : Fragment() {
     lateinit var imageView : ImageView
     lateinit var energyTextView : TextView
     lateinit var lifeTextView : TextView
+    lateinit var victoryTextView : TextView
+    var index: Int? = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +34,7 @@ class PlayerProfileSection : Fragment() {
         // Inflate the layout for this fragment
         val view : View =inflater.inflate(R.layout.fragment_player_profile_section, container, false)
 
+        index = arguments?.getInt("index")
 
         return view
     }
@@ -41,19 +46,31 @@ class PlayerProfileSection : Fragment() {
         imageView  = view.findViewById(R.id.image_img)
         energyTextView = view.findViewById(R.id.energypoints_tv)
         lifeTextView = view.findViewById(R.id.lifepoints_tv)
+        victoryTextView = view.findViewById(R.id.victorypoints_tv)
 
 
 
-        this.textView.text = gameBrain.player.name_
-        this.imageView.setImageResource(gameBrain.player.image_)
+        if(this.index != null ) {
+            this.textView.text = gameBrain.characters[index!!].name_
+            this.imageView.setImageResource(gameBrain.characters[index!!].image_)
+            gameBrain.characters[index!!].lifePoints_.observe(viewLifecycleOwner, Observer {
+                this.lifeTextView.text = "$it"
+                if(it <= 0){
+                    this.imageView.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f)})
+                    this.textView.paintFlags = this.textView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    this.textView.setTypeface(null, Typeface.ITALIC)
+                }
+            })
 
-        gameBrain.player.lifePoints_.observe(viewLifecycleOwner, Observer {
-            this.lifeTextView.text = gameBrain.player.lifePointsString()
-        })
+            gameBrain.characters[index!!].energyPoints_.observe(viewLifecycleOwner, Observer {
+                this.energyTextView.text = "$it"
+            })
 
-        gameBrain.player.energyPoints_.observe(viewLifecycleOwner, Observer {
-            this.energyTextView.text = gameBrain.player.energyPointsString()
-        })
+            gameBrain.characters[index!!].victoryPoints_.observe(viewLifecycleOwner, Observer {
+                this.victoryTextView.text = "$it"
+            })
+
+        }
     }
 
 }
