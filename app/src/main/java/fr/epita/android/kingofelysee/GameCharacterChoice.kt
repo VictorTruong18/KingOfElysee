@@ -1,15 +1,17 @@
 package fr.epita.android.kingofelysee
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import fr.epita.android.kingofelysee.objects.Character
+import org.w3c.dom.Text
+import java.util.Objects
 
 
 class GameCharacterChoice : Fragment() {
@@ -28,164 +30,45 @@ class GameCharacterChoice : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val macronImage : ImageView = view.findViewById(R.id.macron_img)
-        val lepenImage : ImageView = view.findViewById(R.id.lepen_img)
-        val melenchonImage : ImageView = view.findViewById(R.id.melenchon_img)
-        val hidalgoImage : ImageView = view.findViewById(R.id.hidalgo_img)
-        val lasalleImage : ImageView = view.findViewById(R.id.lassalle_img)
-        val pecressImageView : ImageView = view.findViewById(R.id.pecress_img)
+        var characters = arrayOf<Character>(
+            Character(
+                name = "Emanuella Macron", image = R.drawable.macron
+            ),
+            Character(
+                name = "Martin Le Pen", image = R.drawable.lepen
+            ),
+            Character(
+                name = "Lucie Melanchon", image = R.drawable.melenchon
+            ),
+            Character(
+                name = "Yann Hidalgo", image = R.drawable.hidalgo
+            ),
+            Character(
+                name = "Jeanne Lassale", image = R.drawable.lasalle
+            ),
+            Character(
+                name = "Vladimir Pecresse", image = R.drawable.pecresse
+            )
+        )
+        characters.shuffle()
 
-        //TODO : Clean this please (Sorry)
-        //TODO : Mettre le vrai nom de tous les persos
-        macronImage.setOnClickListener {
-            val userCharacter : Character = Character(
-                name = "Macron", image = R.drawable.macron, isThePlayer = true
-            )
-            var characters = arrayOf<Character>(
-                userCharacter,
-                Character(
-                    name = "Lepen", image = R.drawable.lepen, isThePlayer = false
-                ),
-                Character(
-                    name = "Melenchon", image = R.drawable.melenchon, isThePlayer = false
-                ),
-                Character(
-                    name = "Hidalgo", image = R.drawable.hidalgo, isThePlayer = false
-                ),
-                Character(
-                    name = "Lasalle", image = R.drawable.lasalle, isThePlayer = false
-                ),
-                Character(
-                    name = "Pecresse", image = R.drawable.pecresse, isThePlayer = false
-                )
-            )
+        for (i in 1..6) {
+            val image : ImageView = view.findViewById(resources.getIdentifier("img_$i", "id", context?.packageName))
+            val text : TextView = view.findViewById(resources.getIdentifier("text_$i", "id", context?.packageName))
+            image.setImageResource(characters[i-1].image_)
+            text.text = characters[i-1].name_
+            image.setOnClickListener {
+                characters[i-1].isThePlayer_ = true
+                gameBrain.chooseCharacter(characters[i-1])
+                findNavController().navigate(R.id.action_gameCharacterChoice_to_gameBoard)
+            }
+        }
 
-            gameBrain.chooseCharacter(userCharacter)
-            findNavController().navigate(R.id.action_gameCharacterChoice_to_gameBoard)
-        }
-        lepenImage.setOnClickListener {
-            val userCharacter : Character = Character(
-                name = "Lepen", image = R.drawable.lepen, isThePlayer = true
-            )
-            var characters = arrayOf<Character>(
-                Character(
-                    name = "Macron", image = R.drawable.macron, isThePlayer = false
-                ),
-                userCharacter,
-                Character(
-                    name = "Melenchon", image = R.drawable.melenchon, isThePlayer = false
-                ),
-                Character(
-                    name = "Hidalgo", image = R.drawable.hidalgo, isThePlayer = false
-                ),
-                Character(
-                    name = "Lasalle", image = R.drawable.lasalle, isThePlayer = false
-                ),
-                Character(
-                    name = "Pecresse", image = R.drawable.pecresse, isThePlayer = false
-                )
-            )
-            gameBrain.chooseCharacter(userCharacter)
-            findNavController().navigate(R.id.action_gameCharacterChoice_to_gameBoard)
-        }
-        melenchonImage.setOnClickListener {
-            val userCharacter : Character = Character(
-                name = "Melenchon", image = R.drawable.melenchon, isThePlayer = true
-            )
-            var characters = arrayOf<Character>(
-                Character(
-                    name = "Macron", image = R.drawable.macron, isThePlayer = false
-                ),
-                Character(
-                    name = "Lepen", image = R.drawable.lepen, isThePlayer = false
-                ),
-                userCharacter,
-                Character(
-                    name = "Hidalgo", image = R.drawable.hidalgo, isThePlayer = false
-                ),
-                Character(
-                    name = "Lasalle", image = R.drawable.lasalle, isThePlayer = false
-                ),
-                Character(
-                    name = "Pecresse", image = R.drawable.pecresse, isThePlayer = false
-                )
-            )
-            gameBrain.chooseCharacter(userCharacter)
-            findNavController().navigate(R.id.action_gameCharacterChoice_to_gameBoard)
-        }
-        hidalgoImage.setOnClickListener {
-            val userCharacter : Character = Character(
-                name = "Hidalgo", image = R.drawable.hidalgo, isThePlayer = true
-            )
-            var characters = arrayOf<Character>(
-                Character(
-                    name = "Macron", image = R.drawable.macron, isThePlayer = false
-                ),
-                Character(
-                    name = "Lepen", image = R.drawable.lepen, isThePlayer = false
-                ),
-                Character(
-                    name = "Melenchon", image = R.drawable.melenchon, isThePlayer = false
-                ),
-                userCharacter,
-                Character(
-                    name = "Lasalle", image = R.drawable.lasalle, isThePlayer = false
-                ),
-                Character(
-                    name = "Pecresse", image = R.drawable.pecresse, isThePlayer = false
-                )
-            )
-            gameBrain.chooseCharacter(userCharacter)
-            findNavController().navigate(R.id.action_gameCharacterChoice_to_gameBoard)
-        }
-        lasalleImage.setOnClickListener {
-            val userCharacter : Character = Character(
-                name = "Lasalle", image = R.drawable.lasalle, isThePlayer = true
-            )
-            var characters = arrayOf<Character>(
-                Character(
-                    name = "Macron", image = R.drawable.macron, isThePlayer = false
-                ),
-                Character(
-                    name = "Lepen", image = R.drawable.lepen, isThePlayer = false
-                ),
-                Character(
-                    name = "Melenchon", image = R.drawable.melenchon, isThePlayer = false
-                ),
-                Character(
-                    name = "Hidalgo", image = R.drawable.hidalgo, isThePlayer = false
-                ),
-                userCharacter,
-                Character(
-                    name = "Pecresse", image = R.drawable.pecresse, isThePlayer = false
-                )
-            )
-            gameBrain.chooseCharacter(userCharacter)
-            findNavController().navigate(R.id.action_gameCharacterChoice_to_gameBoard)
-        }
-        pecressImageView.setOnClickListener {
-            val userCharacter : Character = Character(
-                name = "Pecresse", image = R.drawable.pecresse, isThePlayer = true
-            )
-            var characters = arrayOf<Character>(
-                Character(
-                    name = "Macron", image = R.drawable.macron, isThePlayer = false
-                ),
-                Character(
-                    name = "Lepen", image = R.drawable.lepen, isThePlayer = false
-                ),
-                Character(
-                    name = "Melenchon", image = R.drawable.melenchon, isThePlayer = false
-                ),
-                Character(
-                    name = "Hidalgo", image = R.drawable.hidalgo, isThePlayer = false
-                ),
-                Character(
-                    name = "Lasalle", image = R.drawable.lasalle, isThePlayer = false
-                ),
-                userCharacter
-            )
-            gameBrain.chooseCharacter(userCharacter)
+        val imageRandom : ImageView = view.findViewById(R.id.img_7)
+        imageRandom.setOnClickListener {
+            var randomCharacter = characters[(0..characters.size - 1).random()]
+            randomCharacter.isThePlayer_ = true
+            gameBrain.chooseCharacter(randomCharacter)
             findNavController().navigate(R.id.action_gameCharacterChoice_to_gameBoard)
         }
 

@@ -27,5 +27,9 @@
         android:id="@+id/gameBoard"
         android:name="fr.epita.android.kingofelysee.GameBoard"
         android:label="fragment_game_board"
-        tools:layout="@layout/fragment_game_board" />
+        tools:layout="@layout/fragment_game_board" >
+        <action
+            android:id="@+id/action_gameBoard_to_gameMenu"
+            app:destination="@id/gameMenu" />
+    </fragment>
 </navigation>

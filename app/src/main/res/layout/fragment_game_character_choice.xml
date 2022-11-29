@@ -5,96 +5,217 @@
     android:id="@+id/game_character_choice"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#1D1E25"
     tools:context=".GameCharacterChoice">
 
 
-    <ImageView
-        android:id="@+id/lassalle_img"
-        android:layout_width="115dp"
-        android:layout_height="157dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="200dp"
-        android:src="@drawable/lasalle"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/img_5"
+        android:layout_width="112dp"
+        android:layout_height="112dp"
+        android:layout_marginTop="32dp"
+        android:scaleType="centerCrop"
+        tools:src="@tools:sample/avatars"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lepen_img"
-        app:srcCompat="@drawable/lasalle" />
+        app:layout_constraintTop_toBottomOf="@+id/text_2"
+        app:shapeAppearanceOverlay="@style/rounded_corner" />
 
-    <ImageView
-        android:id="@+id/pecress_img"
-        android:layout_width="115dp"
-        android:layout_height="157dp"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/img_4"
+        android:layout_width="112dp"
+        android:layout_height="112dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="10dp"
-        android:src="@drawable/pecresse"
-        app:layout_constraintEnd_toStartOf="@+id/lepen_img"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:scaleType="centerCrop"
+        tools:src="@tools:sample/avatars"
+        app:layout_constraintEnd_toStartOf="@+id/img_2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/lassalle_img"
-        app:srcCompat="@drawable/pecresse" />
+        app:layout_constraintTop_toTopOf="@+id/img_5"
+        app:shapeAppearanceOverlay="@style/rounded_corner" />
 
-    <ImageView
-        android:id="@+id/hidalgo_img"
-        android:layout_width="115dp"
-        android:layout_height="157dp"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/img_6"
+        android:layout_width="112dp"
+        android:layout_height="112dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="20dp"
-        android:src="@drawable/hidalgo"
+        android:scaleType="centerCrop"
+        tools:src="@tools:sample/avatars"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/lepen_img"
-        app:layout_constraintTop_toTopOf="@+id/lassalle_img"
-        app:srcCompat="@drawable/hidalgo" />
+        app:layout_constraintStart_toEndOf="@+id/img_2"
+        app:layout_constraintTop_toTopOf="@+id/img_5"
+        app:shapeAppearanceOverlay="@style/rounded_corner" />
 
-    <ImageView
-        android:id="@+id/melenchon_img"
-        android:layout_width="115dp"
-        android:layout_height="157dp"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/img_7"
+        android:layout_width="112dp"
+        android:layout_height="112dp"
+        android:layout_marginTop="32dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/random"
+        app:layout_constraintEnd_toEndOf="@+id/img_6"
+        app:layout_constraintStart_toStartOf="@+id/img_4"
+        app:layout_constraintTop_toBottomOf="@+id/text_5"
+        app:shapeAppearanceOverlay="@style/rounded_corner"
+        app:srcCompat="@drawable/random" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/img_3"
+        android:layout_width="112dp"
+        android:layout_height="112dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="20dp"
-        android:src="@drawable/melenchon"
+        android:scaleType="centerCrop"
+        tools:src="@tools:sample/avatars"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/lepen_img"
-        app:layout_constraintTop_toTopOf="@+id/lepen_img"
-        app:srcCompat="@drawable/melenchon" />
+        app:layout_constraintStart_toEndOf="@+id/img_2"
+        app:layout_constraintTop_toTopOf="@+id/img_2"
+        app:shapeAppearanceOverlay="@style/rounded_corner" />
 
-    <ImageView
-        android:id="@+id/macron_img"
-        android:layout_width="115dp"
-        android:layout_height="157dp"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/img_1"
+        android:layout_width="112dp"
+        android:layout_height="112dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="10dp"
-        android:src="@drawable/macron"
-        app:layout_constraintEnd_toStartOf="@+id/lepen_img"
+        android:scaleType="centerCrop"
+        tools:src="@tools:sample/avatars"
+        app:layout_constraintEnd_toStartOf="@+id/img_2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/lepen_img"
-        app:srcCompat="@drawable/macron" />
+        app:layout_constraintTop_toTopOf="@+id/img_2"
+        app:shapeAppearanceOverlay="@style/rounded_corner" />
 
-    <ImageView
-        android:id="@+id/lepen_img"
-        android:layout_width="115dp"
-        android:layout_height="157dp"
-        android:layout_marginTop="40dp"
-        android:src="@drawable/lepen"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/img_2"
+        android:layout_width="112dp"
+        android:layout_height="112dp"
+        android:layout_marginTop="64dp"
+        android:scaleType="centerCrop"
+        tools:src="@tools:sample/avatars"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/CharacterChoice_tv"
-        app:srcCompat="@drawable/lepen" />
+        app:shapeAppearanceOverlay="@style/rounded_corner" />
 
     <TextView
         android:id="@+id/CharacterChoice_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:fontFamily="cursive"
-        android:text="Choose your politician !"
+        android:layout_marginTop="92dp"
+        android:fontFamily="serif"
+        android:text="Choisissez votre sauveur !"
         android:textAlignment="center"
-        android:textSize="45sp"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/france_flag"
+        android:layout_width="64dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/flag_france"
+        app:layout_constraintBottom_toTopOf="@+id/CharacterChoice_tv"
+        app:layout_constraintEnd_toEndOf="@+id/CharacterChoice_tv"
+        app:layout_constraintStart_toStartOf="@+id/CharacterChoice_tv"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1" />
+
+    <TextView
+        android:id="@+id/text_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="text1"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/img_1"
+        app:layout_constraintStart_toStartOf="@+id/img_1"
+        app:layout_constraintTop_toBottomOf="@+id/img_1" />
+
+    <TextView
+        android:id="@+id/text_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="text2"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/img_2"
+        app:layout_constraintStart_toStartOf="@+id/img_2"
+        app:layout_constraintTop_toBottomOf="@+id/img_2" />
+
+    <TextView
+        android:id="@+id/text_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="text3"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/img_3"
+        app:layout_constraintStart_toStartOf="@+id/img_3"
+        app:layout_constraintTop_toBottomOf="@+id/img_3" />
+
+    <TextView
+        android:id="@+id/text_random"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Aléatoire"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/img_7"
+        app:layout_constraintStart_toStartOf="@+id/img_7"
+        app:layout_constraintTop_toBottomOf="@+id/img_7" />
+
+    <TextView
+        android:id="@+id/text_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="text4"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/img_4"
+        app:layout_constraintStart_toStartOf="@+id/img_4"
+        app:layout_constraintTop_toBottomOf="@+id/img_4" />
+
+    <TextView
+        android:id="@+id/text_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="text5"
+        android:textAlignment="center"
+        android:textColor="#FAFAFA"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/img_5"
+        app:layout_constraintStart_toStartOf="@+id/img_5"
+        app:layout_constraintTop_toBottomOf="@+id/img_5" />
+
+    <TextView
+        android:id="@+id/text_6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="text6"
+        android:textAlignment="center"
+        android:textColor="#FAFAFA"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/img_6"
+        app:layout_constraintStart_toStartOf="@+id/img_6"
+        app:layout_constraintTop_toBottomOf="@+id/img_6" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

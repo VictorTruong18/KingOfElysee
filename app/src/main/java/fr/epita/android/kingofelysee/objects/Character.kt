@@ -8,13 +8,12 @@ val ENERGY_POINTS = 0
 
 class Character(
     name: String,
-    image: Int,
-    isThePlayer: Boolean
+    image: Int
 ) : ViewModel(){
     val name_ : String = name
     val image_ : Int = image
-    val isThePlayer_ : Boolean = isThePlayer
 
+    var isThePlayer_ : Boolean = false
     var lifePoints_ = MutableLiveData<Int>(LIFE_POINTS)
     var energyPoints_ = MutableLiveData<Int>(ENERGY_POINTS)
     var onTheHill_ : Boolean = false

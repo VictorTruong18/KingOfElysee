@@ -1,22 +1,73 @@
 package fr.epita.android.kingofelysee
 
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
+import androidx.activity.addCallback
+import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 
 class GameBoard : Fragment() {
 
     private val gameBrain : GameBrain by activityViewModels()
 
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            val alertDialog: AlertDialog? = activity?.let {
+                val builder = AlertDialog.Builder(it)
+                builder.apply {
+                    setPositiveButton("Quitter"
+                    ) { dialog, id ->
+                        WindowCompat.setDecorFitsSystemWindows(it.window, false)
+                        WindowInsetsControllerCompat(it.window,
+                            it.window.decorView.findViewById(android.R.id.content)).let { controller ->
+                            controller.hide(WindowInsetsCompat.Type.systemBars())
+
+                            // When the screen is swiped up at the bottom
+                            // of the application, the navigationBar shall
+                            // appear for some time
+                            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                        }
+                        findNavController().navigate(R.id.action_gameBoard_to_gameMenu)
+                    }
+                    setNegativeButton("Annuler"
+                    ) { dialog, id ->
+                        WindowCompat.setDecorFitsSystemWindows(it.window, false)
+                        WindowInsetsControllerCompat(it.window,
+                            it.window.decorView.findViewById(android.R.id.content)).let { controller ->
+                            controller.hide(WindowInsetsCompat.Type.systemBars())
+
+                            // When the screen is swiped up at the bottom
+                            // of the application, the navigationBar shall
+                            // appear for some time
+                            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                        }
+                    }
+                }
+                builder.setMessage("Êtes-vous sûr de vouloir quitter la partie en cours ?")
+                    .setTitle("Attention")
+
+
+                // Create the AlertDialog
+                builder.create()
+                builder.show()
+            }
+        }
     }
 
     override fun onCreateView(
