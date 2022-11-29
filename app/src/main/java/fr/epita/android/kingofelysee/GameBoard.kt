@@ -82,7 +82,7 @@ class GameBoard : Fragment() {
         val incrementButton : Button = view.findViewById(R.id.life_inc_btn)
 
         incrementButton.setOnClickListener{
-            //gameBrain.player.incrementLifePoints(1)
+            gameBrain.characters[0].incrementLifePoints(-10)
         }
 
         communicator = activity as Communicator

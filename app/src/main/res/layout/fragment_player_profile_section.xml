@@ -95,11 +95,11 @@
         app:layout_constraintTop_toBottomOf="@+id/name_tv" />
 
     <TextView
-        android:id="@+id/winpoints_tv"
+        android:id="@+id/victorypoints_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="10"
+        android:text="0"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/imageView3"
