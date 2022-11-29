@@ -80,12 +80,6 @@ class GameBoard : Fragment() {
         // Inflate the layout for this fragment
         val view : View =inflater.inflate(R.layout.fragment_game_board, container, false)
 
-        val incrementButton : Button = view.findViewById(R.id.mycards_button)
-
-        incrementButton.setOnClickListener{
-            gameBrain.characters[0].incrementLifePoints(-10)
-        }
-
         communicator = activity as Communicator
 
         var id=1;
@@ -104,10 +98,12 @@ class GameBoard : Fragment() {
         val shopButton: Button = view.findViewById(R.id.shop_button)
         val quitShopButton: Button = view.findViewById(R.id.quit_shop)
         quitShopButton.setBackgroundColor(Color.RED)
+        val myCardsButton: Button = view.findViewById(R.id.mycards_button)
 
         shopButton.setOnClickListener {
             communicator.loadShopFragment()
             shopButton.visibility = View.GONE
+            myCardsButton.visibility = View.GONE
             quitShopButton.visibility = View.VISIBLE
         }
 
@@ -115,8 +111,15 @@ class GameBoard : Fragment() {
             communicator.unloadShopFragment()
             quitShopButton.visibility = View.GONE
             shopButton.visibility = View.VISIBLE
+            myCardsButton.visibility = View.VISIBLE
         }
 
+        myCardsButton.setOnClickListener {
+            communicator.loadMyCardsFragment()
+            shopButton.visibility = View.GONE
+            myCardsButton.visibility = View.GONE
+            quitShopButton.visibility = View.VISIBLE
+        }
 
         communicator.loadMap()
     }

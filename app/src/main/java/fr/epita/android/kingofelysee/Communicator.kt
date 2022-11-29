@@ -8,5 +8,7 @@ interface Communicator {
 
     fun unloadShopFragment()
 
+    fun loadMyCardsFragment()
+
     fun loadMap()
 }
