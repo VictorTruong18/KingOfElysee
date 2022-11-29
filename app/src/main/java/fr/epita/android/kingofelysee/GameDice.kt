@@ -14,7 +14,7 @@ import java.util.*
 class GameDice : Fragment() {
     private val rollAnimation: Long = 1000;
     private val delayTime: Long = 50;
-    private val diceDefaultValues: Array<String> = arrayOf("1", "2", "3", "€", "!", "♥");
+    private val diceDefaultValues: Array<String> = arrayOf("1", "2", "3", "\uD83D\uDCB6", "❗", "♥");
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
