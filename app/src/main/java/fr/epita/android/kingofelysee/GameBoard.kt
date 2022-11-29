@@ -1,10 +1,9 @@
 package fr.epita.android.kingofelysee
 
 import android.app.AlertDialog
-import android.content.DialogInterface
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -70,6 +69,8 @@ class GameBoard : Fragment() {
                 builder.show()
             }
         }
+
+
     }
 
     override fun onCreateView(
@@ -79,7 +80,7 @@ class GameBoard : Fragment() {
         // Inflate the layout for this fragment
         val view : View =inflater.inflate(R.layout.fragment_game_board, container, false)
 
-        val incrementButton : Button = view.findViewById(R.id.life_inc_btn)
+        val incrementButton : Button = view.findViewById(R.id.mycards_button)
 
         incrementButton.setOnClickListener{
             gameBrain.characters[0].incrementLifePoints(-10)
@@ -95,6 +96,29 @@ class GameBoard : Fragment() {
         }
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val shopButton: Button = view.findViewById(R.id.shop_button)
+        val quitShopButton: Button = view.findViewById(R.id.quit_shop)
+        quitShopButton.setBackgroundColor(Color.RED)
+
+        shopButton.setOnClickListener {
+            communicator.loadShopFragment()
+            shopButton.visibility = View.GONE
+            quitShopButton.visibility = View.VISIBLE
+        }
+
+        quitShopButton.setOnClickListener {
+            communicator.unloadShopFragment()
+            quitShopButton.visibility = View.GONE
+            shopButton.visibility = View.VISIBLE
+        }
+
+
+        communicator.loadMap()
     }
 
 
