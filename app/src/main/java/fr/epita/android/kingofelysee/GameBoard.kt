@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 
 
 class GameBoard : Fragment() {
@@ -30,6 +31,12 @@ class GameBoard : Fragment() {
 
         incrementButton.setOnClickListener{
             gameBrain.player.incrementLifePoints(1)
+        }
+
+        val diceButton: Button = view.findViewById(R.id.navToDiceButton)
+
+        diceButton.setOnClickListener {
+            findNavController().navigate(R.id.action_gameBoard_to_gameDice);
         }
         return view
     }
