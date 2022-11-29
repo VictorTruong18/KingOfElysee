@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity(), Communicator {
         transaction.commit()
     }
 
-    override fun loadShopFragment() {
+    private fun animateMainFragmentToFullScreen() {
         val profile : View = findViewById(R.id.profile_0)
         defaultProfileHeight = profile.layoutParams.height
 
@@ -94,6 +94,11 @@ class MainActivity : AppCompatActivity(), Communicator {
         animationSet2.play(slideAnimator2)
         animationSet2.startDelay = 300
 
+        animationSet.start()
+        animationSet2.start()
+    }
+
+    override fun loadShopFragment() {
         val gameStatus: TextView = findViewById(R.id.game_status)
         gameStatus.text = "Quelles cartes acheter..."
 
@@ -104,8 +109,7 @@ class MainActivity : AppCompatActivity(), Communicator {
         transaction.replace(R.id.mainFragment, ShopFragment())
         transaction.commit()
 
-        animationSet.start()
-        animationSet2.start()
+        animateMainFragmentToFullScreen()
     }
 
     override fun unloadShopFragment() {
@@ -161,6 +165,14 @@ class MainActivity : AppCompatActivity(), Communicator {
 
         animationSet.start()
         animationSet2.start()
+    }
+
+    override fun loadMyCardsFragment() {
+        val transaction = this.supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.mainFragment, MyCardsFragment())
+        transaction.commit()
+
+        animateMainFragmentToFullScreen()
     }
 
     override fun loadMap() {
