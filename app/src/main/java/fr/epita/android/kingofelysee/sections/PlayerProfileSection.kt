@@ -22,6 +22,7 @@ class PlayerProfileSection : Fragment() {
     lateinit var imageView : ImageView
     lateinit var energyTextView : TextView
     lateinit var lifeTextView : TextView
+    var index: Int? = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +31,7 @@ class PlayerProfileSection : Fragment() {
         // Inflate the layout for this fragment
         val view : View =inflater.inflate(R.layout.fragment_player_profile_section, container, false)
 
+        index = arguments?.getInt("index")
 
         return view
     }
@@ -44,16 +46,17 @@ class PlayerProfileSection : Fragment() {
 
 
 
-        this.textView.text = gameBrain.player.name_
-        this.imageView.setImageResource(gameBrain.player.image_)
+        if(this.index != null ) {
+            this.textView.text = gameBrain.characters[index!!].name_
+            this.imageView.setImageResource(gameBrain.characters[index!!].image_)
+            gameBrain.characters[index!!].lifePoints_.observe(viewLifecycleOwner, Observer {
+                this.lifeTextView.text = gameBrain.characters[index!!].lifePointsString()
+            })
 
-        gameBrain.player.lifePoints_.observe(viewLifecycleOwner, Observer {
-            this.lifeTextView.text = gameBrain.player.lifePointsString()
-        })
-
-        gameBrain.player.energyPoints_.observe(viewLifecycleOwner, Observer {
-            this.energyTextView.text = gameBrain.player.energyPointsString()
-        })
+            gameBrain.characters[index!!].energyPoints_.observe(viewLifecycleOwner, Observer {
+                this.energyTextView.text = gameBrain.characters[index!!].energyPointsString()
+            })
+        }
     }
 
 }

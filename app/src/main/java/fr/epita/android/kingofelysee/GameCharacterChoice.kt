@@ -59,7 +59,6 @@ class GameCharacterChoice : Fragment() {
             text.text = characters[i-1].name_
             image.setOnClickListener {
                 characters[i-1].isThePlayer_ = true
-                gameBrain.chooseCharacter(characters[i-1])
                 findNavController().navigate(R.id.action_gameCharacterChoice_to_gameBoard)
             }
         }
@@ -68,9 +67,11 @@ class GameCharacterChoice : Fragment() {
         imageRandom.setOnClickListener {
             var randomCharacter = characters[(0..characters.size - 1).random()]
             randomCharacter.isThePlayer_ = true
-            gameBrain.chooseCharacter(randomCharacter)
             findNavController().navigate(R.id.action_gameCharacterChoice_to_gameBoard)
         }
+
+
+        gameBrain.initAllCharacters(characters)
 
 
     }

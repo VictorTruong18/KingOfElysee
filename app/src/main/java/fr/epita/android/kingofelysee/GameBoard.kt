@@ -23,6 +23,8 @@ class GameBoard : Fragment() {
 
     private val gameBrain : GameBrain by activityViewModels()
 
+    private lateinit var  communicator: Communicator
+
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,10 +82,22 @@ class GameBoard : Fragment() {
         val incrementButton : Button = view.findViewById(R.id.life_inc_btn)
 
         incrementButton.setOnClickListener{
-            gameBrain.player.incrementLifePoints(1)
+            //gameBrain.player.incrementLifePoints(1)
         }
+
+        communicator = activity as Communicator
+
+        var id=1;
+        for (i in 0..5) {
+            val c = gameBrain.characters[i]
+            communicator.passCharacterToFragment(if (c.isThePlayer_) 0 else id++, i)
+
+        }
+
         return view
     }
+
+
 
 
 }

@@ -67,7 +67,7 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginTop="12dp"
-        android:src="@drawable/lightning"
+        android:src="@drawable/euro"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_img"
         app:layout_constraintTop_toBottomOf="@+id/name_tv" />
