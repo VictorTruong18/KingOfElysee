@@ -12,10 +12,12 @@ import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+
 
 
 class GameBoard : Fragment() {
@@ -79,6 +81,18 @@ class GameBoard : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view : View =inflater.inflate(R.layout.fragment_game_board, container, false)
+
+        val incrementButton : Button = view.findViewById(R.id.mycards_button)
+
+        incrementButton.setOnClickListener{
+            gameBrain.characters[0].incrementLifePoints(-10)
+        }
+
+        val diceButton: Button = view.findViewById(R.id.navToDiceButton)
+
+        diceButton.setOnClickListener {
+            findNavController().navigate(R.id.action_gameBoard_to_gameDice);
+        }
 
         communicator = activity as Communicator
 

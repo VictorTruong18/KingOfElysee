@@ -29,6 +29,15 @@
         android:label="fragment_game_board"
         tools:layout="@layout/fragment_game_board" >
         <action
+            android:id="@+id/action_gameBoard_to_gameDice"
+            app:destination="@id/gameDice" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameDice"
+        android:name="fr.epita.android.kingofelysee.GameDice"
+        android:label="fragment_game_dice"
+        tools:layout="@layout/fragment_game_dice" />
+
             android:id="@+id/action_gameBoard_to_gameMenu"
             app:destination="@id/gameMenu" />
     </fragment>
