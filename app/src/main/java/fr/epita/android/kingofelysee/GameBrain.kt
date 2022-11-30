@@ -9,6 +9,7 @@ import java.util.*
 import kotlin.random.Random.Default.nextBoolean
 import kotlin.random.Random.Default.nextInt
 
+
 class GameBrain : ViewModel()  {
     var characters = listOf<Character>()
     var partyStarted : Boolean = false
@@ -64,6 +65,11 @@ class GameBrain : ViewModel()  {
 
 
         communicator.dialog(dice.toString(),character.name_+(if(character.isThePlayer_) " (Vous)" else ""))
+        
+    }
+
+    fun getAllNonPlayerCharacters(): List<Character> {
+        return this.characters.filter { c -> !c.isThePlayer_ }
     }
 
 }
