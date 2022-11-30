@@ -11,14 +11,14 @@
 
     <TextView
         android:id="@+id/menu_title_tv"
-        android:layout_width="321dp"
+        android:layout_width="0dp"
         android:layout_height="67dp"
         android:fontFamily="serif"
         android:rotation="-10"
         android:text="King of Élysée"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
-        android:textSize="48sp"
+        android:textSize="42sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

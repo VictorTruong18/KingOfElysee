@@ -2,7 +2,6 @@ package fr.epita.android.kingofelysee.sections
 
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
-import android.media.Image
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,7 +17,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface
 
 
-class PlayerProfileSection : Fragment() {
+class PlayerProfileFragment : Fragment() {
     private val gameBrain : GameBrain by activityViewModels()
     lateinit var textView : TextView
     lateinit var imageView : ImageView

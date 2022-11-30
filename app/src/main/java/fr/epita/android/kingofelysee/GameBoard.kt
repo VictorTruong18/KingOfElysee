@@ -1,13 +1,9 @@
 package fr.epita.android.kingofelysee
 
 import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,12 +14,8 @@ import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -42,38 +34,18 @@ class GameBoard : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         gameBrain.partyStarted = true
-        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-            val alertDialog: AlertDialog? = activity?.let {
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            activity?.let {
 
                 val builder = AlertDialog.Builder(it)
                 builder.apply {
                     setPositiveButton("Quitter"
-                    ) { dialog, id ->
-                        WindowCompat.setDecorFitsSystemWindows(it.window, false)
-                        gameBrain.partyStarted = false
-                        WindowInsetsControllerCompat(it.window,
-                            it.window.decorView.findViewById(android.R.id.content)).let { controller ->
-                            controller.hide(WindowInsetsCompat.Type.systemBars())
-
-                            // When the screen is swiped up at the bottom
-                            // of the application, the navigationBar shall
-                            // appear for some time
-                            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                        }
+                    ) { _, _ ->
+                        requireActivity().viewModelStore.clear()
                         findNavController().navigate(R.id.action_gameBoard_to_gameMenu)
                     }
                     setNegativeButton("Annuler"
-                    ) { dialog, id ->
-                        WindowCompat.setDecorFitsSystemWindows(it.window, false)
-                        WindowInsetsControllerCompat(it.window,
-                            it.window.decorView.findViewById(android.R.id.content)).let { controller ->
-                            controller.hide(WindowInsetsCompat.Type.systemBars())
-
-                            // When the screen is swiped up at the bottom
-                            // of the application, the navigationBar shall
-                            // appear for some time
-                            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                        }
+                    ) { _, _ ->
                     }
                 }
                 builder.setMessage("Êtes-vous sûr de vouloir quitter la partie en cours ?")
@@ -92,7 +64,7 @@ class GameBoard : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         val view : View =inflater.inflate(R.layout.fragment_game_board, container, false)
 
@@ -100,12 +72,6 @@ class GameBoard : Fragment() {
 
         incrementButton.setOnClickListener{
             gameBrain.characters[0].incrementLifePoints(-10)
-        }
-
-        val diceButton: Button = view.findViewById(R.id.navToDiceButton)
-
-        diceButton.setOnClickListener {
-
         }
 
         communicator = activity as Communicator
@@ -124,6 +90,7 @@ class GameBoard : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         val shopButton: Button = view.findViewById(R.id.shop_button)
         val quitShopButton: Button = view.findViewById(R.id.quit_shop)
         quitShopButton.setBackgroundColor(Color.RED)
@@ -137,6 +104,7 @@ class GameBoard : Fragment() {
             myCardsButton.visibility = View.GONE
             quitShopButton.visibility = View.VISIBLE
         }
+        shopButton.isClickable = false
 
         quitShopButton.setOnClickListener {
             communicator.unloadShopFragment()
@@ -151,6 +119,7 @@ class GameBoard : Fragment() {
             myCardsButton.visibility = View.GONE
             quitShopButton.visibility = View.VISIBLE
         }
+        myCardsButton.isClickable = false
 
         communicator.loadMap()
 
@@ -162,11 +131,13 @@ class GameBoard : Fragment() {
 
                     // If you open the app you receive this message
                     if(gameBrain.nbTurn == 0){
-                        sendBlockingDialogToPlayer("La France va mal ! Trouve le moyen de t'enrichir malgrès tout",
+                        sendBlockingDialogToPlayer("La France va mal ! Trouve le moyen de t'enrichir malgré tout",
                             "Bienvenue " + (gameBrain.characters.find { it.isThePlayer_}?.name_ )
                         )
 
                     }
+
+                    val character = gameBrain.characters[gameBrain.characterTurnIndex]
 
                     // Game checks if there aren't already people on the top of the hill
                     // If there is nobody then it's the person whose it's his turn and the person after to get on the hills
@@ -174,17 +145,27 @@ class GameBoard : Fragment() {
                     // If we fall back to only four alive characters there is only one hill
 
 
-
-
                     // Whose turn is it ?
                     // Is he Alive ?
-                    if(gameBrain.characters[gameBrain.characterTurnIndex].lifePoints_.value!! > 0) {
+                    if(character.lifePoints_.value!! > 0) {
                         // Is he the player ?
-                        if (gameBrain.characters[gameBrain.characterTurnIndex].isThePlayer_) {
+                        if (character.isThePlayer_) {
+                            shopButton.isClickable = true
+                            shopButton.alpha = 1F
+                            myCardsButton.isClickable = true
+                            myCardsButton.alpha = 1F
                             gameStatusTV.text = "C'est à toi de convaincre les Français !"
+                            gameBrain.addToHill(character)
+                            delay(2000)
+                            //boucle while infini interaction
+
+                            shopButton.isClickable = false
+                            shopButton.alpha = .5F
+                            myCardsButton.isClickable = false
+                            myCardsButton.alpha = .5F
                         } else {
                             gameStatusTV.text =
-                                "C'est au tour de " + gameBrain.characters[gameBrain.characterTurnIndex].name_
+                                "C'est au tour de " + character.name_
                             delay(2000)
                         }
                     }

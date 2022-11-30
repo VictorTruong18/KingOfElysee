@@ -2,33 +2,20 @@ package fr.epita.android.kingofelysee
 
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
-import android.graphics.Color
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.AccelerateInterpolator
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.lifecycleScope
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import fr.epita.android.kingofelysee.sections.PlayerProfileSection
-import fr.epita.android.kingofelysee.objects.Character
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import fr.epita.android.kingofelysee.sections.MapFragment
+import fr.epita.android.kingofelysee.sections.MyCardsFragment
+import fr.epita.android.kingofelysee.sections.PlayerProfileFragment
+import fr.epita.android.kingofelysee.sections.ShopFragment
 
 class MainActivity : AppCompatActivity(), Communicator {
     private var defaultProfileHeight: Int = 0
@@ -40,18 +27,6 @@ class MainActivity : AppCompatActivity(), Communicator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        WindowInsetsControllerCompat(window,
-            window.decorView.findViewById(android.R.id.content)).let { controller ->
-            controller.hide(WindowInsetsCompat.Type.systemBars())
-
-            // When the screen is swiped up at the bottom
-            // of the application, the navigationBar shall
-            // appear for some time
-            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
-
         
 
 
@@ -62,7 +37,7 @@ class MainActivity : AppCompatActivity(), Communicator {
         bundle.putInt("index", i)
         val transaction = this.supportFragmentManager.beginTransaction()
 
-        val fragment = PlayerProfileSection()
+        val fragment = PlayerProfileFragment()
         fragment.arguments = bundle
         transaction.replace(resources.getIdentifier("profile_$id", "id", this.packageName), fragment)
         transaction.commit()
@@ -204,9 +179,11 @@ class MainActivity : AppCompatActivity(), Communicator {
          MaterialAlertDialogBuilder(this)
             .setTitle(title)
             .setMessage(message).setPositiveButton("Compris"){dialog, id ->
-                 getRidOfDigustingAndroidTheme()
                  this.gameBrain.gamePaused = false
                  }
+             .setOnDismissListener {
+                 this.gameBrain.gamePaused = false
+             }
             .create()
              .show()
 
@@ -214,16 +191,17 @@ class MainActivity : AppCompatActivity(), Communicator {
 
     }
 
-    override fun getRidOfDigustingAndroidTheme() {
-        WindowCompat.setDecorFitsSystemWindows(this.window, false)
-        WindowInsetsControllerCompat(this.window,
-            this.window.decorView.findViewById(android.R.id.content)).let { controller ->
-            controller.hide(WindowInsetsCompat.Type.systemBars())
-
-            // When the screen is swiped up at the bottom
-            // of the application, the navigationBar shall
-            // appear for some time
-            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            this.window.decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                        or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            )
         }
     }
 

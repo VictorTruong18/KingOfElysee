@@ -1,5 +1,6 @@
 package fr.epita.android.kingofelysee
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import fr.epita.android.kingofelysee.objects.Character
 import java.util.*
@@ -11,10 +12,20 @@ class GameBrain : ViewModel()  {
     var characterTurnIndex : Int = (0..4).random()
     var nbTurn : Int = 0
     var gamePaused : Boolean = false
-    lateinit var hill : ArrayDeque<Character>
+    val hill = MutableLiveData<MutableSet<Character>>()
 
     fun initAllCharacters(character : Array<Character>){
         this.characters = character.toList()
+        hill.value = mutableSetOf()
+    }
 
+    fun addToHill(character: Character){
+        hill.value?.add(character)
+        hill.value = hill.value
+    }
+
+    fun removeFromHill(character: Character){
+        hill.value?.remove(character)
+        hill.value = hill.value
     }
 }
