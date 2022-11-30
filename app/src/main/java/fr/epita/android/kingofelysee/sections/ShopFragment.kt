@@ -7,7 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.fragment.app.activityViewModels
+import fr.epita.android.kingofelysee.GameBrain
 import fr.epita.android.kingofelysee.R
+import fr.epita.android.kingofelysee.objects.Card
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,8 +23,10 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class ShopFragment : Fragment() {
-    lateinit var card1: ImageView
-    lateinit var card2: ImageView
+    private val gameBrain: GameBrain by activityViewModels()
+
+    lateinit var card1: Card
+    lateinit var card2: Card
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +43,23 @@ class ShopFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val cards = gameBrain.getShopCards()
+
+        this.card1 = cards.first
+        this.card2 = cards.second
+
+        view.findViewById<ImageView>(R.id.card1Image).setImageResource(this.card1.id)
+        view.findViewById<ImageView>(R.id.card2Image).setImageResource(this.card2.id)
+
+/*
         card1 = view.findViewById(R.id.card1Image)
         card2 = view.findViewById(R.id.card2Image)
 
+
+
         card1.setImageResource(R.drawable.bogoss)
         card2.setImageResource(R.drawable.bogoss)
+
+ */
     }
 }
