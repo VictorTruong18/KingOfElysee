@@ -3,8 +3,6 @@ package fr.epita.android.kingofelysee
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import fr.epita.android.kingofelysee.objects.Character
-import java.util.*
-import kotlin.random.Random.Default.nextInt
 
 class GameBrain : ViewModel()  {
     var characters = listOf<Character>()
@@ -27,6 +25,10 @@ class GameBrain : ViewModel()  {
     fun removeFromHill(character: Character){
         hill.value?.remove(character)
         hill.value = hill.value
+    }
+
+    fun getAllNonPlayerCharacters(): List<Character> {
+        return this.characters.filter { c -> !c.isThePlayer_ }
     }
 
 }

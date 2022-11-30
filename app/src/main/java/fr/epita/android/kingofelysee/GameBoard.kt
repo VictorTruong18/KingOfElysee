@@ -197,11 +197,33 @@ class GameBoard : Fragment() {
                         gameBrain.characterTurnIndex = 0
                         gameBrain.nbTurn += 1
                     }
+
+                    // Victory / Defeat check
+
+                    // Someone has won
+                    if(character.victoryPoints_.value!! >= 20) {
+                       if(character.isThePlayer_) {
+                           Log.d("Game has ended", "The player has won")
+                       } else {
+                           Log.d("Game has ended", "Another player has won")
+                       }
+                    }
+
+                    // The player is the last standing
+                    if(character.energyPoints_.value!! > 0 && character.isThePlayer_ &&
+                        gameBrain.getAllNonPlayerCharacters().sumOf {it.lifePoints_.value!! } == 0) {
+                        Log.d("Game has ended", "All the other players died")
+                    }
+
+                    // The player has no energy points left
+                    if (character.isThePlayer_ && character.energyPoints_.value!! <= 0) {
+                        Log.d("Game has ended", "The player has lost")
+                    }
+
                 }
             }
         }
     }
-
 
     suspend fun sendBlockingDialogToPlayer(message: String, title: String){
         gameBrain.gamePaused = true
