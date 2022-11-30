@@ -6,21 +6,35 @@ import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import fr.epita.android.kingofelysee.sections.PlayerProfileSection
 import fr.epita.android.kingofelysee.objects.Character
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), Communicator {
     private var defaultProfileHeight: Int = 0
     private var defaultScrollHeight: Int = 0
+
+    private val gameBrain : GameBrain by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +51,10 @@ class MainActivity : AppCompatActivity(), Communicator {
             // appear for some time
             controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
+
+        
+
+
     }
 
     override fun passCharacterToFragment(id: Int, i: Int) {
@@ -180,4 +198,33 @@ class MainActivity : AppCompatActivity(), Communicator {
         transaction.replace(R.id.mainFragment, MapFragment())
         transaction.commit()
     }
+
+    override fun dialog(message : String, title : String) {
+
+         MaterialAlertDialogBuilder(this)
+            .setTitle(title)
+            .setMessage(message).setPositiveButton("Compris"){dialog, id ->
+                 getRidOfDigustingAndroidTheme()
+                 this.gameBrain.gamePaused = false
+                 }
+            .create()
+             .show()
+
+
+
+    }
+
+    override fun getRidOfDigustingAndroidTheme() {
+        WindowCompat.setDecorFitsSystemWindows(this.window, false)
+        WindowInsetsControllerCompat(this.window,
+            this.window.decorView.findViewById(android.R.id.content)).let { controller ->
+            controller.hide(WindowInsetsCompat.Type.systemBars())
+
+            // When the screen is swiped up at the bottom
+            // of the application, the navigationBar shall
+            // appear for some time
+            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+    }
+
 }
