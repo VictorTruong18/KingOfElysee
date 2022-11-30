@@ -107,7 +107,7 @@ class GameBoard : Fragment() {
         shopButton.isClickable = false
 
         quitShopButton.setOnClickListener {
-            communicator.unloadShopFragment()
+            communicator.unloadFragment()
             quitShopButton.visibility = View.GONE
             shopButton.visibility = View.VISIBLE
             myCardsButton.visibility = View.VISIBLE
@@ -126,12 +126,12 @@ class GameBoard : Fragment() {
         // Game Loop
         lifecycleScope.launch(){
             while(true) {
-                delay(2000)
+                delay(250)
                 while (gameBrain.partyStarted) {
 
                     // If you open the app you receive this message
                     if(gameBrain.nbTurn == 0){
-                        sendBlockingDialogToPlayer("La France va mal ! Trouve le moyen de t'enrichir malgré tout",
+                        sendBlockingDialogToPlayer("La France va mal ! Trouve le moyen de t'enrichir malgré tout !",
                             "Bienvenue " + (gameBrain.characters.find { it.isThePlayer_}?.name_ )
                         )
 
@@ -154,10 +154,14 @@ class GameBoard : Fragment() {
                             shopButton.alpha = 1F
                             myCardsButton.isClickable = true
                             myCardsButton.alpha = 1F
-                            gameStatusTV.text = "C'est à toi de convaincre les Français !"
+
                             gameBrain.addToHill(character)
-                            delay(2000)
-                            //boucle while infini interaction
+                            gameBrain.gamePaused = true
+
+                            communicator.loadDiceFragment()
+                            while(gameBrain.gamePaused){
+                                delay(1000)
+                            }
 
                             shopButton.isClickable = false
                             shopButton.alpha = .5F

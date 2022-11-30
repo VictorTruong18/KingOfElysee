@@ -10,9 +10,11 @@ interface Communicator {
 
     fun loadShopFragment()
 
-    fun unloadShopFragment()
+    fun unloadFragment()
 
     fun loadMyCardsFragment()
+
+    fun loadDiceFragment()
 
     fun loadMap()
 

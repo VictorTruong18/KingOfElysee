@@ -106,10 +106,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="92dp"
         android:fontFamily="serif"
-        android:text="Choisissez votre sauveur !"
+        android:text="Choisissez votre sauveur·se !"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
-        android:textSize="28sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

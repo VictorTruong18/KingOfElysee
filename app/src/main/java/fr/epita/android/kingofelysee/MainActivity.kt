@@ -105,7 +105,16 @@ class MainActivity : AppCompatActivity(), Communicator {
         animateMainFragmentToFullScreen()
     }
 
-    override fun unloadShopFragment() {
+    override fun loadDiceFragment() {
+        val gameStatus: TextView = findViewById(R.id.game_status)
+        gameStatus.text = "À toi de convaincre les français·es !"
+
+        val transaction = this.supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.mainFragment, GameDice())
+        transaction.commit()
+    }
+
+    override fun unloadFragment() {
         val profile : View = findViewById(R.id.profile_0)
 
         val slideAnimator: ValueAnimator = ValueAnimator
@@ -149,18 +158,24 @@ class MainActivity : AppCompatActivity(), Communicator {
 
         val gameStatus: TextView = findViewById(R.id.game_status)
         // TODO Change later
-        gameStatus.text = "Merci"
 
         val myCardsButton: Button = findViewById(R.id.mycards_button)
         myCardsButton.visibility = View.VISIBLE
 
-        loadMap()
+        if(gameBrain.characters[gameBrain.characterTurnIndex].isThePlayer_){
+            loadDiceFragment()
+        }else{
+            loadMap()
+        }
 
         animationSet.start()
         animationSet2.start()
     }
 
     override fun loadMyCardsFragment() {
+        val gameStatus: TextView = findViewById(R.id.game_status)
+        gameStatus.text = "Voulez-vous utiliser une carte ?"
+
         val transaction = this.supportFragmentManager.beginTransaction()
         transaction.replace(R.id.mainFragment, MyCardsFragment())
         transaction.commit()
