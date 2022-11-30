@@ -16,6 +16,8 @@ interface Communicator {
 
     fun loadDiceFragment()
 
+    fun toggleShopBtn()
+
     fun loadMap()
 
     fun dialog(message : String, title : String)

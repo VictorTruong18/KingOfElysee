@@ -13,7 +13,9 @@ import android.widget.HorizontalScrollView
 import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
+import androidx.core.view.marginStart
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -72,7 +74,9 @@ class GameBoard : Fragment() {
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_game_board, container, false)
 
-        val incrementButton: Button = view.findViewById(R.id.mycards_button)
+
+        val incrementButton : Button = view.findViewById(R.id.mycards_button)
+
 
         incrementButton.setOnClickListener {
             gameBrain.characters[0].incrementLifePoints(-10)
@@ -103,7 +107,8 @@ class GameBoard : Fragment() {
 
         gameStatusTV = view.findViewById(R.id.game_status)
         scrollBotView = view.findViewById(R.id.scrollView2)
-        fragmentWidth = view.findViewById<View?>(R.id.profile_1).layoutParams.width + 16
+        val profileView = view.findViewById<View?>(R.id.profile_1)
+        fragmentWidth = profileView.layoutParams.width + profileView.marginStart
 
         shopButton.setOnClickListener {
             communicator.loadShopFragment()
@@ -136,16 +141,30 @@ class GameBoard : Fragment() {
                 delay(250)
                 while (gameBrain.partyStarted) {
 
+                    val character = gameBrain.characters[gameBrain.characterTurnIndex]
                     // If you open the app you receive this message
-                    if (gameBrain.nbTurn == 0) {
-                        sendBlockingDialogToPlayer(
-                            "La France va mal ! Trouve le moyen de t'enrichir malgré tout !",
-                            "Bienvenue " + (gameBrain.characters.find { it.isThePlayer_ }?.name_)
-                        )
 
+                    if(gameBrain.nbTurn == 0){
+                        gameBrain.gamePaused = true
+                        communicator.dialog("La France va mal ! Trouve le moyen de t'enrichir malgré tout !",
+                            "Bienvenue " + (gameBrain.characters.find { it.isThePlayer_}?.name_ )
+                        )
+                        while(gameBrain.gamePaused){
+                            delay(500)
+                        }
+                        gameBrain.addToHill(character)
+                        val secondCharacter =  gameBrain.characters[(gameBrain.characterTurnIndex + 1) % gameBrain.characters.size]
+                        gameBrain.addToHill(secondCharacter)
+
+                        delay(1000)
+                        gameBrain.gamePaused = true
+                        communicator.dialog(character.name_ + " et " + secondCharacter.name_  + " ont pris possession de l'Elysée" ,"Passage à l'Elysée")
+
+                        while(gameBrain.gamePaused){
+                            delay(500)
+                        }
                     }
 
-                    val character = gameBrain.characters[gameBrain.characterTurnIndex]
 
                     // Game checks if there aren't already people on the top of the hill
 
@@ -164,22 +183,17 @@ class GameBoard : Fragment() {
                     if (character.lifePoints_.value!! > 0) {
                         // Is he the player ?
                         if (character.isThePlayer_) {
-                            shopButton.isClickable = true
-                            shopButton.alpha = 1F
-                            myCardsButton.isClickable = true
-                            myCardsButton.alpha = 1F
+                            communicator.toggleShopBtn()
 
                             gameBrain.gamePaused = true
-
                             communicator.loadDiceFragment()
-                            while (gameBrain.gamePaused) {
-                                delay(1000)
-                            }
 
-                            shopButton.isClickable = false
-                            shopButton.alpha = .5F
-                            myCardsButton.isClickable = false
-                            myCardsButton.alpha = .5F
+                            while(gameBrain.gamePaused){
+                                delay(50)
+                            }
+                            communicator.toggleShopBtn()
+
+                            delay(1000)
                         } else {
                             scrollBotView.post(Runnable {
                                 scrollBotView.scrollTo(
@@ -187,13 +201,17 @@ class GameBoard : Fragment() {
                                     0
                                 )
                             })
-                            gameStatusTV.text =
-                                "C'est au tour de " + character.name_
-                            delay(2000)
+                            gameStatusTV.text = "C'est au tour de " + character.name_
+
+                            delay(1000)
+                            gameBrain.play(character, GameDice().getStringDice(), communicator)
+                            while(gameBrain.gamePaused){
+                                delay(50)
+                            }
+                            delay(1000)
                         }
                     }
 
-                    Log.d("Loop", "Loop is still running")
 
                     // End of the turn go to the next character
                     if (gameBrain.characterTurnIndex < gameBrain.characters.size - 1) {
@@ -269,6 +287,5 @@ class GameBoard : Fragment() {
             delay(1000)
         }
     }
-
 
 }

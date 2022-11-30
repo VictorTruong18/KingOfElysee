@@ -2,6 +2,7 @@ package fr.epita.android.kingofelysee
 
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -111,7 +112,7 @@ class MainActivity : AppCompatActivity(), Communicator {
 
         val transaction = this.supportFragmentManager.beginTransaction()
         transaction.replace(R.id.mainFragment, GameDice())
-        transaction.commit()
+        transaction.commitNow()
     }
 
     override fun unloadFragment() {
@@ -187,6 +188,22 @@ class MainActivity : AppCompatActivity(), Communicator {
         val transaction = this.supportFragmentManager.beginTransaction()
         transaction.replace(R.id.mainFragment, MapFragment())
         transaction.commit()
+    }
+
+    override fun toggleShopBtn(){
+        val shopButton: Button = findViewById(R.id.shop_button)
+        val myCardsButton: Button = findViewById(R.id.mycards_button)
+        if(shopButton.alpha == .5F) {
+            shopButton.isClickable = true
+            shopButton.alpha = 1F
+            myCardsButton.isClickable = true
+            myCardsButton.alpha = 1F
+        } else {
+            shopButton.isClickable = false
+            shopButton.alpha = .5F
+            myCardsButton.isClickable = false
+            myCardsButton.alpha = .5F
+        }
     }
 
     override fun dialog(message : String, title : String) {
