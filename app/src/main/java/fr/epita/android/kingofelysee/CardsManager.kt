@@ -32,8 +32,6 @@ class CardsManager() {
     fun useCard(card: Card, user: Character, target: Character? = null, characters: List<Character>) : Boolean {
         if (card.hasToChooseTarget && target == null) return false
 
-        Log.d("Lounes", "Using card ${card.id}")
-
         // From now on we know that if we need a target its not going to be null
         when (card.id) {
             R.drawable.bad_coke -> return badCokeEffect(target!!)
@@ -146,12 +144,10 @@ class CardsManager() {
     }
 
     private fun inflationEffect(user: Character, characters: List<Character>) : Boolean {
-        Log.d("Lounes", "$characters")
         characters.forEach {
             if (it == user) return@forEach
 
             it.incrementEnergyPoints(-3)
-            Log.d("Lounes", "${it.name_}: ${it.energyPoints_.value}")
         }
 
         return true

@@ -1,5 +1,6 @@
 package fr.epita.android.kingofelysee
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import fr.epita.android.kingofelysee.objects.Card
@@ -13,7 +14,7 @@ class GameBrain : ViewModel()  {
     var gamePaused : Boolean = false
     val hill = MutableLiveData<MutableSet<Character>>()
 
-    val cardsManager = CardsManager()
+    private val cardsManager = CardsManager()
     var shopCards = MutableLiveData(Pair(cardsManager.getRandomCard(), cardsManager.getRandomCard()))
 
     fun initAllCharacters(character : Array<Character>){
@@ -31,9 +32,13 @@ class GameBrain : ViewModel()  {
         hill.value = hill.value
     }
 
-    //fun getShopCards() : Pair<Card, Card> {
-    //    return shopCards.
-    //}
+    fun getCurrentPlayer() : Character {
+        return characters[characterTurnIndex]
+    }
+
+    fun getPlayersWithoutCurrentPlayer() : List<Character> {
+        return characters.filter { it != getCurrentPlayer() }
+    }
 
     fun renewShopCards() {
         this.shopCards.value = Pair(cardsManager.getRandomCard(), cardsManager.getRandomCard())
@@ -59,10 +64,14 @@ class GameBrain : ViewModel()  {
         val card = if (cardNbr == 0) shopCards.value!!.first else shopCards.value!!.second
 
         if (cardNbr == 0) {
+            Log.d("Lounes", "Removed card 0")
             this.shopCards.value = Pair(cardsManager.getRandomCard(), this.shopCards.value!!.second)
         } else {
+            Log.d("Lounes", "Removed card 1")
             this.shopCards.value = Pair(this.shopCards.value!!.first, cardsManager.getRandomCard())
         }
+
+        Log.d("Lounes", "In useShopCard")
 
         return cardsManager.useCard(card, user, target, this.characters)
     }

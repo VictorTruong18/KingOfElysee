@@ -19,6 +19,4 @@ interface Communicator {
     fun loadMap()
 
     fun dialog(message : String, title : String)
-
-    fun loadChoices()
 }

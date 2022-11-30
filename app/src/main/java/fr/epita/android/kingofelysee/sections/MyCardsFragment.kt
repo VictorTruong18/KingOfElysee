@@ -48,7 +48,8 @@ class MyCardsFragment : Fragment() {
             imagesAndButtons[i].first.setImageResource(card.id)
             imagesAndButtons[i].second.setOnClickListener {
                 if (card.hasToChooseTarget) {
-
+                    val dialog = ChooseTargetDialogFragment(card)
+                    dialog.show(this.parentFragmentManager, "Toto")
                 } else {
                     gameBrain.useCard(card, player)
                 }

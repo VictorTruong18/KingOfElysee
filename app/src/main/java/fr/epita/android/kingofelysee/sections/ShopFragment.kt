@@ -1,6 +1,7 @@
 package fr.epita.android.kingofelysee.sections
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -38,11 +39,18 @@ class ShopFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        gameBrain.shopCards.observe(this.viewLifecycleOwner) {
+            val cards = gameBrain.shopCards
+
+            this.card1 = cards.value!!.first
+            this.card2 = cards.value!!.second
+
+            view.findViewById<ImageView>(R.id.card1Image).setImageResource(this.card1.id)
+            view.findViewById<ImageView>(R.id.card2Image).setImageResource(this.card2.id)
+        }
 
         view.findViewById<Button>(R.id.reset_shop_button).setOnClickListener {
             gameBrain.renewShopCards()
-
-            updateShopViews(view)
         }
 
         view.findViewById<Button>(R.id.shop_buy_card_1).setOnClickListener {
@@ -50,14 +58,14 @@ class ShopFragment : Fragment() {
             val player = gameBrain.characters[gameBrain.characterTurnIndex]
             if (card.effect == Effect.IMMEDIATE) {
                 if (card.hasToChooseTarget) {
-
+                    val dialog = ChooseTargetDialogFragment(card, 0)
+                    dialog.show(this.parentFragmentManager, "Toto")
                 } else {
                     gameBrain.useShopCard(0, player)
                 }
             } else {
                 gameBrain.buyCard(0)
             }
-            updateShopViews(view)
         }
 
         view.findViewById<Button>(R.id.shop_buy_card_2).setOnClickListener {
@@ -65,17 +73,14 @@ class ShopFragment : Fragment() {
             val player = gameBrain.characters[gameBrain.characterTurnIndex]
             if (card.effect == Effect.IMMEDIATE) {
                 if (card.hasToChooseTarget) {
-
+                    val dialog = ChooseTargetDialogFragment(card, 1)
                 } else {
                     gameBrain.useShopCard(1, player)
                 }
             } else {
                 gameBrain.buyCard(1)
             }
-            updateShopViews(view)
         }
-
-        updateShopViews(view)
     }
 
     private fun updateShopViews(view: View) {

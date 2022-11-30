@@ -207,12 +207,6 @@ class MainActivity : AppCompatActivity(), Communicator {
 
     }
 
-    override fun loadChoices() {
-        val transaction = this.supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.mainFragment, ChooseTargetFragment())
-        transaction.commit()
-    }
-
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {
