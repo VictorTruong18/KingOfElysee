@@ -23,6 +23,8 @@ class Character(
     var isMyTurn_ : Boolean = false
 
     fun incrementLifePoints(lifepoints : Int){
+        if(this.lifePoints_.value == 10 && lifepoints > 0)
+            return
         this.lifePoints_.postValue(this.lifePoints_.value!!.plus(lifepoints))
     }
 
@@ -31,6 +33,8 @@ class Character(
     }
 
     fun incrementVictoryPoints(victorypoints : Int){
+        if(this.victoryPoints_.value == 20 && victorypoints > 0)
+            return
         this.victoryPoints_.postValue(this.victoryPoints_.value!!.plus(victorypoints))
     }
 
