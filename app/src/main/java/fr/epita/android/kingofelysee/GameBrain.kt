@@ -4,8 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import fr.epita.android.kingofelysee.objects.Card
 import fr.epita.android.kingofelysee.objects.Character
-import java.util.*
-import kotlin.random.Random.Default.nextInt
 
 class GameBrain : ViewModel()  {
     var characters = listOf<Character>()
@@ -57,7 +55,7 @@ class GameBrain : ViewModel()  {
         }
     }
 
-    fun useCard(cardNbr: Int, user: Character, target: Character? = null) : Boolean {
+    fun useShopCard(cardNbr: Int, user: Character, target: Character? = null) : Boolean {
         val card = if (cardNbr == 0) shopCards.value!!.first else shopCards.value!!.second
 
         if (cardNbr == 0) {
@@ -66,6 +64,10 @@ class GameBrain : ViewModel()  {
             this.shopCards.value = Pair(this.shopCards.value!!.first, cardsManager.getRandomCard())
         }
 
+        return cardsManager.useCard(card, user, target, this.characters)
+    }
+
+    fun useCard(card: Card, user: Character, target: Character? = null) : Boolean {
         return cardsManager.useCard(card, user, target, this.characters)
     }
 }

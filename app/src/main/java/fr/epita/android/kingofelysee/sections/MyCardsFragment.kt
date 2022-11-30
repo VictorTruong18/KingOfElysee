@@ -1,8 +1,6 @@
 package fr.epita.android.kingofelysee.sections
 
-import android.app.ActionBar.LayoutParams
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,10 +50,11 @@ class MyCardsFragment : Fragment() {
                 if (card.hasToChooseTarget) {
 
                 } else {
-                    gameBrain.cardsManager.useCard(card, player, null, gameBrain.characters)
+                    gameBrain.useCard(card, player)
                 }
             }
         }
+
 
         imagesAndButtons.subList(player.cards.size, imagesAndButtons.size).forEach {
             it.first.visibility = View.GONE

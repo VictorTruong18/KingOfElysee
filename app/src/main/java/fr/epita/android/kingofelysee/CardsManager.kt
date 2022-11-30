@@ -76,7 +76,7 @@ class CardsManager() {
         characters.forEach {
             if (it == user) return@forEach
 
-            it.incrementLifePoints(-1)
+            it.incrementLifePoints(1)
         }
 
         user.incrementVictoryPoints(3)

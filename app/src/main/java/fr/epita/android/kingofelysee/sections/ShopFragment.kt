@@ -52,7 +52,7 @@ class ShopFragment : Fragment() {
                 if (card.hasToChooseTarget) {
 
                 } else {
-                    gameBrain.useCard(0, player)
+                    gameBrain.useShopCard(0, player)
                 }
             } else {
                 gameBrain.buyCard(0)
@@ -67,7 +67,7 @@ class ShopFragment : Fragment() {
                 if (card.hasToChooseTarget) {
 
                 } else {
-                    gameBrain.useCard(1, player)
+                    gameBrain.useShopCard(1, player)
                 }
             } else {
                 gameBrain.buyCard(1)
