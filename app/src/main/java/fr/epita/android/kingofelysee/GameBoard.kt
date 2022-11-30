@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.HorizontalScrollView
 import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
@@ -29,6 +30,8 @@ class GameBoard : Fragment() {
 
 
     lateinit var gameStatusTV : TextView
+    lateinit var scrollBotView : HorizontalScrollView
+    var fragmentWidth: Int = 0
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,7 +82,8 @@ class GameBoard : Fragment() {
         var id=1;
         for (i in 0..5) {
             val c = gameBrain.characters[i]
-            communicator.passCharacterToFragment(if (c.isThePlayer_) 0 else id++, i)
+            c.fragment_id_ = if (c.isThePlayer_) 0 else id++
+            communicator.passCharacterToFragment(c.fragment_id_, i)
 
         }
 
@@ -97,6 +101,8 @@ class GameBoard : Fragment() {
         val myCardsButton: Button = view.findViewById(R.id.mycards_button)
 
         gameStatusTV = view.findViewById(R.id.game_status)
+        scrollBotView = view.findViewById(R.id.scrollView2)
+        fragmentWidth = view.findViewById<View?>(R.id.profile_1).layoutParams.width + 16
 
         shopButton.setOnClickListener {
             communicator.loadShopFragment()
@@ -168,6 +174,12 @@ class GameBoard : Fragment() {
                             myCardsButton.isClickable = false
                             myCardsButton.alpha = .5F
                         } else {
+                            scrollBotView.post(Runnable {
+                                scrollBotView.scrollTo(
+                                    fragmentWidth*(character.fragment_id_-1),
+                                    0
+                                )
+                            })
                             gameStatusTV.text =
                                 "C'est au tour de " + character.name_
                             delay(2000)

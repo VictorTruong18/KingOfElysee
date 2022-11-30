@@ -9,7 +9,7 @@ import kotlin.random.Random.Default.nextInt
 class GameBrain : ViewModel()  {
     var characters = listOf<Character>()
     var partyStarted : Boolean = false
-    var characterTurnIndex : Int = (0..4).random()
+    var characterTurnIndex : Int = (0..5).random()
     var nbTurn : Int = 0
     var gamePaused : Boolean = false
     val hill = MutableLiveData<MutableSet<Character>>()
@@ -28,4 +28,5 @@ class GameBrain : ViewModel()  {
         hill.value?.remove(character)
         hill.value = hill.value
     }
+
 }

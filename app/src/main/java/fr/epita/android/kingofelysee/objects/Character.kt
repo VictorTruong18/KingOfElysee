@@ -14,6 +14,7 @@ class Character(
     val name_ : String = name
     val image_ : Int = image
 
+    var fragment_id_ : Int = 0
     var isThePlayer_ : Boolean = false
     var lifePoints_ = MutableLiveData<Int>(LIFE_POINTS)
     var energyPoints_ = MutableLiveData<Int>(ENERGY_POINTS)
