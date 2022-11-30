@@ -202,16 +202,6 @@ class GameBoard : Fragment() {
                         }
                     }
 
-
-                    // End of the turn go to the next character
-                    if (gameBrain.characterTurnIndex < gameBrain.characters.size - 1) {
-                        gameBrain.characterTurnIndex++
-                        gameBrain.nbTurn += 1
-                    } else {
-                        gameBrain.characterTurnIndex = 0
-                        gameBrain.nbTurn += 1
-                    }
-
                     // Victory / Defeat check
 
                     // Someone has won
@@ -219,32 +209,45 @@ class GameBoard : Fragment() {
                         if (character.isThePlayer_) {
                             Log.d("Game has ended", "The player has won")
                             displayEndMessage("Bravo !", "Vous avez sauvé la France !")
+                            gameBrain.partyStarted = false
                         } else {
                             Log.d("Game has ended", "Another player has won")
                             displayEndMessage(
                                 "Honte à vous ! ",
-                                "Vous n'avez pas réussi·e à sauver la France"
+                                "Vous n'avez pas réussi·e à sauver la France "
                             )
+                            gameBrain.partyStarted = false
                         }
                     }
 
-                    // The player is the last standing
-                    if (character.energyPoints_.value!! > 0 && character.isThePlayer_ &&
-                        gameBrain.getAllNonPlayerCharacters().sumOf { it.lifePoints_.value!! } == 0
-                    ) {
-                        displayEndMessage("Bravo !", "Vous avez sauvé la France !")
-                        Log.d("Game has ended", "All the other players died")
+                    for (loopedCharacter in gameBrain.characters) {
+                        // The player is the last standing
+                        if (loopedCharacter.lifePoints_.value!! > 0 && loopedCharacter.isThePlayer_ &&
+                            gameBrain.getAllNonPlayerCharacters().sumOf { it.lifePoints_.value!! } == 0
+                        ) {
+                            displayEndMessage("Bravo !", "Vous avez sauvé la France !")
+                            Log.d("Game has ended", "All the other players died")
+                            gameBrain.partyStarted = false
+                        }
+
+                        // The player has no life points left
+                        if (loopedCharacter.isThePlayer_ && loopedCharacter.lifePoints_.value!! <= 0) {
+                            Log.d("Game has ended", "The player has no life points left")
+                            displayEndMessage(
+                                "Honte à vous ! ",
+                                "Vous n'avez pas réussi·e à sauver la France"
+                            )
+                            gameBrain.partyStarted = false
+                        }
                     }
 
-                    // The player has no energy points left
-                    if (character.isThePlayer_ && character.energyPoints_.value!! <= 0) {
-                        Log.d("Game has ended", "The player has lost")
-                        displayEndMessage(
-                            "Honte à vous ! ",
-                            "Vous n'avez pas réussi·e à sauver la France"
-                        )
+                    // End of the turn go to the next character
+                    if (gameBrain.characterTurnIndex < gameBrain.characters.size - 1) {
+                        gameBrain.characterTurnIndex++
+                    } else {
+                        gameBrain.characterTurnIndex = 0
                     }
-
+                    gameBrain.nbTurn += 1
                 }
             }
         }
