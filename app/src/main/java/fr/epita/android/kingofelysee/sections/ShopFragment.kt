@@ -72,7 +72,9 @@ class ShopFragment : Fragment() {
             } else {
                 gameBrain.buyCard(1)
             }
+            updateShopViews(view)
         }
+
         updateShopViews(view)
     }
 
