@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChooseTargetFragment">
+
+    <ImageView
+        android:id="@+id/target_1_image"
+        android:layout_width="156dp"
+        android:layout_height="138dp"
+        android:layout_marginTop="18dp"
+        android:src="@drawable/hidalgo"
+        app:layout_constraintEnd_toStartOf="@+id/target_2_image"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/target_2_image"
+        android:layout_width="156dp"
+        android:layout_height="138dp"
+        android:layout_marginTop="18dp"
+        android:src="@drawable/hidalgo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/target_1_image"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/target_3_image"
+        android:layout_width="156dp"
+        android:layout_height="138dp"
+        android:layout_marginTop="18dp"
+        android:src="@drawable/hidalgo"
+        app:layout_constraintEnd_toStartOf="@+id/target_4_image"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/target_1_image" />
+
+    <ImageView
+        android:id="@+id/target_4_image"
+        android:layout_width="156dp"
+        android:layout_height="138dp"
+        android:layout_marginTop="18dp"
+        android:src="@drawable/hidalgo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/target_3_image"
+        app:layout_constraintTop_toBottomOf="@+id/target_2_image" />
+
+    <ImageView
+        android:id="@+id/target_5_image"
+        android:layout_width="156dp"
+        android:layout_height="138dp"
+        android:layout_marginTop="18dp"
+        android:src="@drawable/hidalgo"
+        app:layout_constraintEnd_toEndOf="@+id/target_4_image"
+        app:layout_constraintStart_toStartOf="@+id/target_3_image"
+        app:layout_constraintTop_toBottomOf="@+id/target_4_image" />
+</androidx.constraintlayout.widget.ConstraintLayout>

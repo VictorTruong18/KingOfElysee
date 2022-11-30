@@ -1,6 +1,5 @@
 package fr.epita.android.kingofelysee.sections
 
-import android.media.Image
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,11 +11,7 @@ import androidx.fragment.app.activityViewModels
 import fr.epita.android.kingofelysee.GameBrain
 import fr.epita.android.kingofelysee.R
 import fr.epita.android.kingofelysee.objects.Card
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import fr.epita.android.kingofelysee.objects.Effect
 
 /**
  * A simple [Fragment] subclass.
@@ -45,30 +40,47 @@ class ShopFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<Button>(R.id.reset_shop_button).setOnClickListener {
-
+            gameBrain.renewShopCards()
 
             updateShopViews(view)
         }
 
         view.findViewById<Button>(R.id.shop_buy_card_1).setOnClickListener {
-            gameBrain.buyCard(0)
+            val card = gameBrain.shopCards.value!!.first
+            val player = gameBrain.characters[gameBrain.characterTurnIndex]
+            if (card.effect == Effect.IMMEDIATE) {
+                if (card.hasToChooseTarget) {
+
+                } else {
+                    gameBrain.useCard(0, player)
+                }
+            } else {
+                gameBrain.buyCard(0)
+            }
             updateShopViews(view)
         }
 
         view.findViewById<Button>(R.id.shop_buy_card_2).setOnClickListener {
-            gameBrain.buyCard(1)
-            updateShopViews(view)
-        }
+            val card = gameBrain.shopCards.value!!.second
+            val player = gameBrain.characters[gameBrain.characterTurnIndex]
+            if (card.effect == Effect.IMMEDIATE) {
+                if (card.hasToChooseTarget) {
 
-        gameBrain.renewShopCards()
+                } else {
+                    gameBrain.useCard(1, player)
+                }
+            } else {
+                gameBrain.buyCard(1)
+            }
+        }
         updateShopViews(view)
     }
 
     private fun updateShopViews(view: View) {
-        val cards = gameBrain.getShopCards()
+        val cards = gameBrain.shopCards
 
-        this.card1 = cards.first
-        this.card2 = cards.second
+        this.card1 = cards.value!!.first
+        this.card2 = cards.value!!.second
 
         view.findViewById<ImageView>(R.id.card1Image).setImageResource(this.card1.id)
         view.findViewById<ImageView>(R.id.card2Image).setImageResource(this.card2.id)

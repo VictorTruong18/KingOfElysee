@@ -28,7 +28,7 @@ class CardsManager(val characters: List<Character>) {
         Card(R.drawable.valls, Effect.IMMEDIATE, true),
     )
 
-    fun useCard(card: Card, user: Character, target: Character?) : Boolean {
+    fun useCard(card: Card, user: Character, target: Character? = null) : Boolean {
         if (card.hasToChooseTarget && target == null) return false
 
         // From now on we know that if we need a target its not going to be null
@@ -54,6 +54,10 @@ class CardsManager(val characters: List<Character>) {
             R.drawable.valls -> return vallsEffect(target!!)
         }
         return false
+    }
+
+    fun getCard(card: Card) : Card? {
+        return cards.find { it.id == card.id }
     }
 
     fun getRandomCard() : Card {

@@ -16,7 +16,7 @@ class GameBrain : ViewModel()  {
     val hill = MutableLiveData<MutableSet<Character>>()
 
     val cardsManager = CardsManager(characters)
-    private var shopCards = Pair(cardsManager.getRandomCard(), cardsManager.getRandomCard())
+    var shopCards = MutableLiveData(Pair(cardsManager.getRandomCard(), cardsManager.getRandomCard()))
 
     fun initAllCharacters(character : Array<Character>){
         this.characters = character.toList()
@@ -33,25 +33,39 @@ class GameBrain : ViewModel()  {
         hill.value = hill.value
     }
 
-    fun getShopCards() : Pair<Card, Card> {
-        return shopCards
-    }
+    //fun getShopCards() : Pair<Card, Card> {
+    //    return shopCards.
+    //}
 
     fun renewShopCards() {
-        this.shopCards = Pair(cardsManager.getRandomCard(), cardsManager.getRandomCard())
+        this.shopCards.value = Pair(cardsManager.getRandomCard(), cardsManager.getRandomCard())
     }
 
     fun buyCard(cardNbr: Int) {
         val currentPlayer = characters[characterTurnIndex]
         // TODO CHECK PLAYER MONEY AND DEDUCT IT
-        val card = if (cardNbr == 0) shopCards.first else shopCards.second
+        val card = if (cardNbr == 0) shopCards.value!!.first else shopCards.value!!.second
 
+        // TODO FEEDBACK
+        if (currentPlayer.cards.size >= 6) return
         currentPlayer.cards.add(card)
 
         if (cardNbr == 0) {
-            this.shopCards = Pair(cardsManager.getRandomCard(), this.shopCards.second)
+            this.shopCards.value = Pair(cardsManager.getRandomCard(), this.shopCards.value!!.second)
         } else {
-            this.shopCards = Pair(this.shopCards.first, cardsManager.getRandomCard())
+            this.shopCards.value = Pair(this.shopCards.value!!.first, cardsManager.getRandomCard())
         }
+    }
+
+    fun useCard(cardNbr: Int, user: Character, target: Character? = null) : Boolean {
+        val card = if (cardNbr == 0) shopCards.value!!.first else shopCards.value!!.second
+
+        if (cardNbr == 0) {
+            this.shopCards.value = Pair(cardsManager.getRandomCard(), this.shopCards.value!!.second)
+        } else {
+            this.shopCards.value = Pair(this.shopCards.value!!.first, cardsManager.getRandomCard())
+        }
+
+        return cardsManager.useCard(card, user, target)
     }
 }

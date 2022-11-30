@@ -20,4 +20,5 @@ interface Communicator {
 
     fun dialog(message : String, title : String)
 
+    fun loadChoices()
 }
