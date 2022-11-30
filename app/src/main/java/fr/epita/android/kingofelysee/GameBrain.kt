@@ -15,7 +15,7 @@ class GameBrain : ViewModel()  {
     var gamePaused : Boolean = false
     val hill = MutableLiveData<MutableSet<Character>>()
 
-    val cardsManager = CardsManager(characters)
+    val cardsManager = CardsManager()
     var shopCards = MutableLiveData(Pair(cardsManager.getRandomCard(), cardsManager.getRandomCard()))
 
     fun initAllCharacters(character : Array<Character>){
@@ -66,6 +66,6 @@ class GameBrain : ViewModel()  {
             this.shopCards.value = Pair(this.shopCards.value!!.first, cardsManager.getRandomCard())
         }
 
-        return cardsManager.useCard(card, user, target)
+        return cardsManager.useCard(card, user, target, this.characters)
     }
 }

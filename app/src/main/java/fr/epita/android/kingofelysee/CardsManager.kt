@@ -1,11 +1,12 @@
 package fr.epita.android.kingofelysee
 
+import android.util.Log
 import fr.epita.android.kingofelysee.objects.Card
 import fr.epita.android.kingofelysee.objects.Effect
 import fr.epita.android.kingofelysee.objects.Character
 import kotlin.random.Random
 
-class CardsManager(val characters: List<Character>) {
+class CardsManager() {
     private val cards = setOf (
         Card(R.drawable.bad_coke, Effect.IMMEDIATE, true),
         Card(R.drawable.bogoss, Effect.DELAYED, false),
@@ -28,14 +29,16 @@ class CardsManager(val characters: List<Character>) {
         Card(R.drawable.valls, Effect.IMMEDIATE, true),
     )
 
-    fun useCard(card: Card, user: Character, target: Character? = null) : Boolean {
+    fun useCard(card: Card, user: Character, target: Character? = null, characters: List<Character>) : Boolean {
         if (card.hasToChooseTarget && target == null) return false
+
+        Log.d("Lounes", "Using card ${card.id}")
 
         // From now on we know that if we need a target its not going to be null
         when (card.id) {
             R.drawable.bad_coke -> return badCokeEffect(target!!)
-            R.drawable.bogoss -> return bogossEffect(user)
-            R.drawable.bollore -> return bolloreEffect(user)
+            R.drawable.bogoss -> return bogossEffect(user, characters)
+            R.drawable.bollore -> return bolloreEffect(user, characters)
             R.drawable.casseroles -> return casserolesEffect(user, target!!)
             R.drawable.cauchemar -> return cauchemarEffect(target!!)
             R.drawable.cgt -> return cgtEffect(user, target!!)
@@ -43,7 +46,7 @@ class CardsManager(val characters: List<Character>) {
             R.drawable.coke -> return cokeEffect(user)
             R.drawable.don -> return donEffect(user, target!!)
             R.drawable.hannounah -> return hannounahEffect(user)
-            R.drawable.inflation -> return inflationEffect(user)
+            R.drawable.inflation -> return inflationEffect(user, characters)
             R.drawable.interview_bfm -> return interviewBFMEffect(user)
             R.drawable.masque -> return masqueEffect(user)
             R.drawable.mcfly -> return mcflyEffect(user)
@@ -69,7 +72,7 @@ class CardsManager(val characters: List<Character>) {
         return true
     }
 
-    private fun bogossEffect(user: Character) : Boolean {
+    private fun bogossEffect(user: Character, characters: List<Character>) : Boolean {
         characters.forEach {
             if (it == user) return@forEach
 
@@ -81,7 +84,7 @@ class CardsManager(val characters: List<Character>) {
         return true
     }
 
-    private fun bolloreEffect(user: Character) : Boolean {
+    private fun bolloreEffect(user: Character, characters: List<Character>) : Boolean {
         characters.forEach {
             if (it == user) return@forEach
 
@@ -142,11 +145,13 @@ class CardsManager(val characters: List<Character>) {
         return true
     }
 
-    private fun inflationEffect(user: Character) : Boolean {
+    private fun inflationEffect(user: Character, characters: List<Character>) : Boolean {
+        Log.d("Lounes", "$characters")
         characters.forEach {
             if (it == user) return@forEach
 
             it.incrementEnergyPoints(-3)
+            Log.d("Lounes", "${it.name_}: ${it.energyPoints_.value}")
         }
 
         return true

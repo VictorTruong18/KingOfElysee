@@ -52,7 +52,7 @@ class MyCardsFragment : Fragment() {
                 if (card.hasToChooseTarget) {
 
                 } else {
-                    gameBrain.cardsManager.useCard(card, player)
+                    gameBrain.cardsManager.useCard(card, player, null, gameBrain.characters)
                 }
             }
         }
