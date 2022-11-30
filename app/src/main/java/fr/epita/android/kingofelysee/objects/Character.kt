@@ -22,6 +22,8 @@ class Character(
     var onTheHill_ : Boolean = false
     var isMyTurn_ : Boolean = false
 
+    var cards = mutableListOf<Card>()
+
     fun incrementLifePoints(lifepoints : Int){
         this.lifePoints_.postValue(this.lifePoints_.value!!.plus(lifepoints))
     }

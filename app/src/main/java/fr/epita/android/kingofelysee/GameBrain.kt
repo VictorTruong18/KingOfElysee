@@ -36,4 +36,22 @@ class GameBrain : ViewModel()  {
     fun getShopCards() : Pair<Card, Card> {
         return shopCards
     }
+
+    fun renewShopCards() {
+        this.shopCards = Pair(cardsManager.getRandomCard(), cardsManager.getRandomCard())
+    }
+
+    fun buyCard(cardNbr: Int) {
+        val currentPlayer = characters[characterTurnIndex]
+        // TODO CHECK PLAYER MONEY AND DEDUCT IT
+        val card = if (cardNbr == 0) shopCards.first else shopCards.second
+
+        currentPlayer.cards.add(card)
+
+        if (cardNbr == 0) {
+            this.shopCards = Pair(cardsManager.getRandomCard(), this.shopCards.second)
+        } else {
+            this.shopCards = Pair(this.shopCards.first, cardsManager.getRandomCard())
+        }
+    }
 }

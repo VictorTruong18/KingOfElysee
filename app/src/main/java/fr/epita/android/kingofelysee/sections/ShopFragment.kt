@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import androidx.fragment.app.activityViewModels
 import fr.epita.android.kingofelysee.GameBrain
@@ -43,6 +44,27 @@ class ShopFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        view.findViewById<Button>(R.id.reset_shop_button).setOnClickListener {
+
+
+            updateShopViews(view)
+        }
+
+        view.findViewById<Button>(R.id.shop_buy_card_1).setOnClickListener {
+            gameBrain.buyCard(0)
+            updateShopViews(view)
+        }
+
+        view.findViewById<Button>(R.id.shop_buy_card_2).setOnClickListener {
+            gameBrain.buyCard(1)
+            updateShopViews(view)
+        }
+
+        gameBrain.renewShopCards()
+        updateShopViews(view)
+    }
+
+    private fun updateShopViews(view: View) {
         val cards = gameBrain.getShopCards()
 
         this.card1 = cards.first
@@ -50,16 +72,5 @@ class ShopFragment : Fragment() {
 
         view.findViewById<ImageView>(R.id.card1Image).setImageResource(this.card1.id)
         view.findViewById<ImageView>(R.id.card2Image).setImageResource(this.card2.id)
-
-/*
-        card1 = view.findViewById(R.id.card1Image)
-        card2 = view.findViewById(R.id.card2Image)
-
-
-
-        card1.setImageResource(R.drawable.bogoss)
-        card2.setImageResource(R.drawable.bogoss)
-
- */
     }
 }
