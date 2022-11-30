@@ -168,16 +168,6 @@ class GameBoard : Fragment() {
 
                     // Game checks if there aren't already people on the top of the hill
 
-                    // Nobody is on any hill at the start of the game put both players on the hill
-                    if(gameBrain.nbTurn == 0){
-                       gameBrain.addToHill(character)
-                        character.onTheHill_ = false
-                        val secondCharacter =  gameBrain.characters[(gameBrain.characterTurnIndex + 1) % gameBrain.characters.size]
-                        gameBrain.addToHill(secondCharacter)
-                        secondCharacter.onTheHill_ = false
-                        sendBlockingDialogToPlayer(character.name_ + " et " + gameBrain.characters[gameBrain.characterTurnIndex + 1].name_  + " ont pris possession de l'Elysée" ,"Passage à l'Elysée")
-                    }
-
                     // Whose turn is it ?
                     // Is he Alive ?
                     if (character.lifePoints_.value!! > 0) {
