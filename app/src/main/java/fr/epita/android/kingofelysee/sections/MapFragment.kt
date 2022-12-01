@@ -86,7 +86,7 @@ class MapFragment : Fragment() {
                 } else if(gameBrain.hill.value?.size!! < 2){
                     hillBtn.visibility = View.VISIBLE
                     hillBtn.text = "Prendre le pouvoir"
-                    hillBtn.setBackgroundColor((nextBtn.background as ColorDrawable).color)
+                    hillBtn.setBackgroundColor(resources.getColor(R.color.blue_500))
                 } else {
                     hillBtn.visibility = View.GONE
                 }
