@@ -25,21 +25,31 @@ class Character(
 
     fun incrementLifePoints(lifepoints : Int): Int{
         var lf = lifepoints
-        if(this.lifePoints_.value!! + lifepoints > 10)
+        if(this.lifePoints_.value!! + lifepoints > 10) {
             lf = 10 - this.lifePoints_.value!!
+        } else if (this.lifePoints_.value!! + lifepoints < 0) {
+            lf = this.lifePoints_.value!! * -1
+        }
         this.lifePoints_.postValue(this.lifePoints_.value!!.plus(lf))
         return lf
     }
 
     fun incrementEnergyPoints(energypoints : Int): Int{
-        this.energyPoints_.postValue(this.energyPoints_.value!!.plus(energypoints))
+        var en = energypoints
+        if (this.energyPoints_.value!! + energypoints < 0) {
+            en = this.energyPoints_.value!! * -1
+        }
+        this.energyPoints_.postValue(this.energyPoints_.value!!.plus(en))
         return energypoints
     }
 
     fun incrementVictoryPoints(victorypoints : Int): Int{
         var vt = victorypoints
-        if(this.victoryPoints_.value!! + victorypoints > 20)
+        if(this.victoryPoints_.value!! + victorypoints > 20) {
             vt = 20 - this.victoryPoints_.value!!
+        } else if (this.victoryPoints_.value!! + victorypoints < 0) {
+            vt = this.victoryPoints_.value!! * -1
+        }
         this.victoryPoints_.postValue(this.victoryPoints_.value!!.plus(vt))
         return vt
     }

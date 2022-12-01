@@ -82,11 +82,11 @@ class MapFragment : Fragment() {
                 if(character.onTheHill_){
                     hillBtn.visibility = View.VISIBLE
                     hillBtn.text = "Démissionner"
-                    hillBtn.setBackgroundColor(Color.RED)
+                    hillBtn.setBackgroundColor(Color.rgb(239,65,53))
                 } else if(gameBrain.hill.value?.size!! < 2){
                     hillBtn.visibility = View.VISIBLE
                     hillBtn.text = "Prendre le pouvoir"
-                    hillBtn.setBackgroundColor(resources.getColor(R.color.blue_500))
+                    hillBtn.setBackgroundColor(resources.getColor(R.color.blue_700))
                 } else {
                     hillBtn.visibility = View.GONE
                 }

@@ -20,7 +20,9 @@ class GameDice : Fragment() {
     private val rollAnimation: Long = 1000;
     private val delayTime: Long = 50;
     private val diceDefaultValues: Array<String> = arrayOf("1", "2", "3", "\uD83D\uDCB6", "❗", "♥")
-    private var lastRoll: List<Int> = randomDice()
+    private var lockDices: Array<Int> = arrayOf(-1,-1,-1,-1,-1,-1)
+    private var lastRoll: Array<Int> = randomDice()
+    private lateinit var allDices: Array<TextView>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +48,20 @@ class GameDice : Fragment() {
         val fourthDiceTextView: TextView = view.findViewById(R.id.fourthDiceTextView);
         val fifthDiceTextView: TextView = view.findViewById(R.id.fifthDiceTextView);
         val sixthDiceTextView: TextView = view.findViewById(R.id.sixthDiceTextView);
+        allDices = arrayOf(firstDiceTextView, secondDiceTextView, thirdDiceTextView, fourthDiceTextView, fifthDiceTextView, sixthDiceTextView)
+
+        for (i in allDices.indices) {
+            allDices[i].setOnClickListener {
+                if(lockDices[i] == 1){
+                    it.alpha = 1F
+                    lockDices[i] = -1
+                } else {
+                    it.alpha = .5F
+                    lockDices[i] = lastRoll[i]
+                }
+            }
+            allDices[i].isClickable = false
+        }
 
         val diceStatus: TextView = view.findViewById(R.id.dice_status)
 
@@ -59,19 +75,20 @@ class GameDice : Fragment() {
         // Set a click listener on the button to roll the dice when the user taps the button
         rollButton.setOnClickListener {
             if(tryNumber == 3){
-                rollButton.text = "Relancer"
                 playButton.visibility = View.VISIBLE
                 communicator.toggleShopBtn()
             }
 
             tryNumber--
-            diceStatus.text = "$tryNumber essai"+(if (tryNumber > 1) "s" else "")+" restant"+(if (tryNumber > 1) "s" else "")
+            rollButton.text = "Relancer ($tryNumber)"
+            diceStatus.text = "Cliquez sur les dès à conserver avant de relancer"
 
             if(tryNumber == 0){
                 rollButton.isClickable = false
                 rollButton.alpha = .5F
             }
 
+            allDices.map { it.isClickable = false }
             // Start random text animation on UI Thread
             val timer = Timer()
             val monitor = object : TimerTask() {
@@ -97,12 +114,17 @@ class GameDice : Fragment() {
                 timer.cancel();
                 playButton.alpha = 1F
                 playButton.isClickable = true
+                allDices.map { it.isClickable = true }
             }, rollAnimation)
         }
     }
 
-    private fun randomDice(): List<Int> {
-        return (1..6).map { (0 .. 5).random() }
+    private fun randomDice(): Array<Int> {
+        val random = arrayOf(0,0,0,0,0,0)
+        for (i in random.indices) {
+            random[i] = if(lockDices[i] == -1) (0 .. 5).random() else lockDices[i]
+        }
+        return random
     }
 
     fun getStringDice(): List<String> {

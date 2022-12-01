@@ -69,7 +69,7 @@ class GameBrain : ViewModel() {
         for (i in 1 .. 3){
             val count_current = dice.count { it == "$i" }
             if (count_current >= 3) {
-                count_vote += i + (3 - count_current)
+                count_vote += i + (count_current - 3)
             }
         }
         count_vote = character.incrementVictoryPoints(count_vote)
