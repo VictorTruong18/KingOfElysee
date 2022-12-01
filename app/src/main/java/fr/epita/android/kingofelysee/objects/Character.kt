@@ -21,6 +21,7 @@ class Character(
     var victoryPoints_ = MutableLiveData<Int>(VICTORY_POINTS)
     var onTheHill_ : Boolean = false
     var canResignTurn_ : Int = -1
+    var lastPlayTurn_ : Int = -1
 
     fun incrementLifePoints(lifepoints : Int): Int{
         var lf = lifepoints

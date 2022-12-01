@@ -37,6 +37,7 @@ class GameBrain : ViewModel() {
     }
 
     fun play(character: Character, dice: List<String>, communicator: Communicator) {
+        character.lastPlayTurn_ = nbTurn
         gamePaused = true
         if (character.isThePlayer_) {
             communicator.loadMap()

@@ -158,12 +158,12 @@ class MainActivity : AppCompatActivity(), Communicator {
         animationSet2.startDelay = 300
 
         val gameStatus: TextView = findViewById(R.id.game_status)
-        // TODO Change later
+        gameStatus.text = "Alors reprenons..."
 
         val myCardsButton: Button = findViewById(R.id.mycards_button)
         myCardsButton.visibility = View.VISIBLE
 
-        if(gameBrain.characters[gameBrain.characterTurnIndex].isThePlayer_ && !gameBrain.waitNext.value!!){
+        if(gameBrain.characters[gameBrain.characterTurnIndex].isThePlayer_ && gameBrain.characters[gameBrain.characterTurnIndex].lastPlayTurn_ < gameBrain.nbTurn){
             loadDiceFragment()
         }else{
             loadMap()
