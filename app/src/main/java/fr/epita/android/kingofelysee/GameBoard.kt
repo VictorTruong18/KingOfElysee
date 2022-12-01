@@ -173,12 +173,9 @@ class GameBoard : Fragment() {
                             character.incrementVictoryPoints(2)
                             gameBrain.hillTurn = gameBrain.nbTurn
                         }
-                        if(gameBrain.hill.value?.size == 0){
+                        val hillCapacity = if(gameBrain.characters.filter { it.lifePoints_.value!! > 0 }.size > 4) 2 else 1
+                        if(!character.onTheHill_ && gameBrain.hill.value?.size!! < hillCapacity){
                             gameBrain.addToHill(character)
-                        } else if(!character.onTheHill_ && gameBrain.hill.value?.size!! < 2) {
-                            if((1..10).random() < character.lifePoints_.value!!) {
-                                gameBrain.addToHill(character)
-                            }
                         }
                         // Is he the player ?
                         if (character.isThePlayer_) {

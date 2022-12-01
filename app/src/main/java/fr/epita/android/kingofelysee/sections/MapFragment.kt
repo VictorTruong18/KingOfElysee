@@ -78,12 +78,13 @@ class MapFragment : Fragment() {
             }
             val character = gameBrain.characters[gameBrain.characterTurnIndex]
             val player = gameBrain.characters.filter { c -> c.isThePlayer_ }.first()
+            val hillCapacity = if(gameBrain.characters.filter { it.lifePoints_.value!! > 0 }.size > 4) 2 else 1
             if(character.isThePlayer_&& gameBrain.nbTurn > 0){
                 if(character.onTheHill_){
                     hillBtn.visibility = View.VISIBLE
                     hillBtn.text = "Démissionner"
                     hillBtn.setBackgroundColor(Color.rgb(239,65,53))
-                } else if(gameBrain.hill.value?.size!! < 2){
+                } else if(gameBrain.hill.value?.size!! < hillCapacity){
                     hillBtn.visibility = View.VISIBLE
                     hillBtn.text = "Prendre le pouvoir"
                     hillBtn.setBackgroundColor(resources.getColor(R.color.blue_700))
