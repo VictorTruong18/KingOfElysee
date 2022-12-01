@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import fr.epita.android.kingofelysee.sections.MapFragment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -28,7 +29,6 @@ class GameBoard : Fragment() {
     private val gameBrain: GameBrain by activityViewModels()
 
     private lateinit var communicator: Communicator
-
 
     lateinit var gameStatusTV: TextView
     lateinit var scrollBotView: HorizontalScrollView
@@ -99,7 +99,6 @@ class GameBoard : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         val shopButton: Button = view.findViewById(R.id.shop_button)
         val quitShopButton: Button = view.findViewById(R.id.quit_shop)
         quitShopButton.setBackgroundColor(Color.RED)
@@ -147,8 +146,8 @@ class GameBoard : Fragment() {
                     if(gameBrain.nbTurn == 0){
                         gameBrain.gamePaused = true
                         communicator.dialog("La France va mal ! Trouve le moyen de t'enrichir malgré tout !",
-                            "Bienvenue " + (gameBrain.characters.find { it.isThePlayer_}?.name_ )
-                        )
+                            "Bienvenue " + (gameBrain.characters.find { it.isThePlayer_}?.name_ ),
+                        true)
                         while(gameBrain.gamePaused){
                             delay(500)
                         }
@@ -158,27 +157,36 @@ class GameBoard : Fragment() {
 
                         delay(1000)
                         gameBrain.gamePaused = true
-                        communicator.dialog(character.name_ + " et " + secondCharacter.name_  + " ont pris possession de l'Elysée" ,"Passage à l'Elysée")
+                        communicator.dialog(character.name_ + " et " + secondCharacter.name_  + " ont pris possession de l'Elysée" ,"Passage à l'Elysée", true)
 
                         while(gameBrain.gamePaused){
                             delay(500)
                         }
                     }
 
-
                     // Game checks if there aren't already people on the top of the hill
-
                     // Whose turn is it ?
                     // Is he Alive ?
                     if (character.lifePoints_.value!! > 0) {
+                        if(character.onTheHill_) {
+                            character.incrementVictoryPoints(2)
+                            gameBrain.hillTurn = gameBrain.nbTurn
+                        }
+                        if(gameBrain.hill.value?.size == 0){
+                            gameBrain.addToHill(character)
+                        } else if(!character.onTheHill_ && gameBrain.hill.value?.size!! < 2) {
+                            if((1..10).random() < character.lifePoints_.value!!) {
+                                gameBrain.addToHill(character)
+                            }
+                        }
                         // Is he the player ?
                         if (character.isThePlayer_) {
                             communicator.toggleShopBtn()
 
-                            gameBrain.gamePaused = true
                             communicator.loadDiceFragment()
 
-                            while(gameBrain.gamePaused){
+                            gameBrain.waitNext.value = true
+                            while(gameBrain.waitNext.value!!){
                                 delay(50)
                             }
                             communicator.toggleShopBtn()
@@ -195,12 +203,14 @@ class GameBoard : Fragment() {
 
                             delay(1000)
                             gameBrain.play(character, GameDice().getStringDice(), communicator)
-                            while(gameBrain.gamePaused){
+                            gameBrain.waitNext.value = true
+                            gameStatusTV.text = character.name_ + " a fini son tour"
+                            while(gameBrain.waitNext.value!!){
                                 delay(50)
                             }
-                            delay(1000)
                         }
                     }
+
 
                     // Victory / Defeat check
 
@@ -270,14 +280,6 @@ class GameBoard : Fragment() {
             // Create the AlertDialog
             builder.create()
             builder.show()
-        }
-    }
-
-    suspend fun sendBlockingDialogToPlayer(message: String, title: String) {
-        gameBrain.gamePaused = true
-        communicator.dialog(message, title)
-        while (gameBrain.gamePaused) {
-            delay(1000)
         }
     }
 

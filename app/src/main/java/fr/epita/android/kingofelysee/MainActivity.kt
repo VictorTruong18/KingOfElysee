@@ -2,9 +2,9 @@ package fr.epita.android.kingofelysee
 
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.text.Spanned
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
@@ -163,7 +163,7 @@ class MainActivity : AppCompatActivity(), Communicator {
         val myCardsButton: Button = findViewById(R.id.mycards_button)
         myCardsButton.visibility = View.VISIBLE
 
-        if(gameBrain.characters[gameBrain.characterTurnIndex].isThePlayer_){
+        if(gameBrain.characters[gameBrain.characterTurnIndex].isThePlayer_ && !gameBrain.waitNext.value!!){
             loadDiceFragment()
         }else{
             loadMap()
@@ -187,7 +187,7 @@ class MainActivity : AppCompatActivity(), Communicator {
     override fun loadMap() {
         val transaction = this.supportFragmentManager.beginTransaction()
         transaction.replace(R.id.mainFragment, MapFragment())
-        transaction.commit()
+        transaction.commitNow()
     }
 
     override fun toggleShopBtn(){
@@ -206,15 +206,17 @@ class MainActivity : AppCompatActivity(), Communicator {
         }
     }
 
-    override fun dialog(message : String, title : String) {
+    override fun dialog(message: String, title: String, resumeGame: Boolean) {
 
          MaterialAlertDialogBuilder(this)
             .setTitle(title)
             .setMessage(message).setPositiveButton("Compris"){dialog, id ->
-                 this.gameBrain.gamePaused = false
+                 if(resumeGame)
+                    this.gameBrain.gamePaused = false
                  }
              .setOnDismissListener {
-                 this.gameBrain.gamePaused = false
+                 if(resumeGame)
+                     this.gameBrain.gamePaused = false
              }
             .create()
              .show()

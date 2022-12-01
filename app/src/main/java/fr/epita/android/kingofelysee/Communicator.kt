@@ -1,6 +1,5 @@
 package fr.epita.android.kingofelysee
-import android.R
-import androidx.core.view.WindowCompat
+import android.text.Spanned
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import fr.epita.android.kingofelysee.objects.Character
@@ -20,6 +19,6 @@ interface Communicator {
 
     fun loadMap()
 
-    fun dialog(message : String, title : String)
+    fun dialog(message: String, title: String, resumeGame: Boolean = false)
 
 }

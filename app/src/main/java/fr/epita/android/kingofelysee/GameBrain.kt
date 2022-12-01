@@ -1,11 +1,8 @@
 package fr.epita.android.kingofelysee
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import fr.epita.android.kingofelysee.objects.Character
-import java.util.*
-import kotlin.random.Random.Default.nextBoolean
 
 
 class GameBrain : ViewModel() {
@@ -13,7 +10,9 @@ class GameBrain : ViewModel() {
     var partyStarted: Boolean = false
     var characterTurnIndex: Int = (0..5).random()
     var nbTurn: Int = 0
+    var hillTurn: Int = 0
     var gamePaused: Boolean = false
+    val waitNext = MutableLiveData(false)
     val hill = MutableLiveData<MutableSet<Character>>()
 
     fun initAllCharacters(character: Array<Character>) {
@@ -22,6 +21,10 @@ class GameBrain : ViewModel() {
     }
 
     fun addToHill(character: Character) {
+        if(nbTurn > 0 && hillTurn != nbTurn) {
+            character.incrementVictoryPoints(1)
+            hillTurn = nbTurn
+        }
         character.onTheHill_ = true
         hill.value?.add(character)
         hill.value = hill.value
@@ -39,79 +42,48 @@ class GameBrain : ViewModel() {
             communicator.loadMap()
         }
         val count_attack = dice.count { it == "❗" }
-        val count_money = dice.count { it == "\uD83D\uDCB6" }
-        val count_life = dice.count { it == "♥" }
+        var count_money = dice.count { it == "\uD83D\uDCB6" }
+        var count_life = dice.count { it == "♥" }
 
         val attack_character = characters.filter { c -> c.onTheHill_ != character.onTheHill_ }
-        Log.d("attack", attack_character.toString())
-        Log.d("attack", count_attack.toString())
+        val out_of_hill: MutableList<Character> = listOf<Character>().toMutableList()
         attack_character.forEach {
             it.incrementLifePoints(-count_attack)
             if (it.onTheHill_) {
                 if (it.isThePlayer_) {
-                    //TODO:dialog
+                    it.canResignTurn_ = nbTurn
                 } else {
-                    it.onTheHill_ = nextBoolean()
+                    it.onTheHill_ = ((1..10).random() < it.lifePoints_.value!!)
+                }
+                if (!it.onTheHill_) {
+                    removeFromHill(it)
+                    out_of_hill.add(it)
                 }
             }
         }
-        character.incrementEnergyPoints(count_money)
-        character.incrementLifePoints(if (character.onTheHill_) 0 else count_life)
+        count_money = character.incrementEnergyPoints(count_money)
+        count_life = character.incrementLifePoints(if (character.onTheHill_) 0 else count_life)
 
-        //TODO:update incrementvictory
-        character.incrementVictoryPoints(0)
+        var count_vote = 0
+        for (i in 1 .. 3){
+            val count_current = dice.count { it == "$i" }
+            if (count_current >= 3) {
+                count_vote += i + (3 - count_current)
+            }
+        }
+        count_vote = character.incrementVictoryPoints(count_vote)
 
+        val lifeMessage = "$count_life ♥ récolté(s)"
+        val attackMessage = "$count_attack ❗ " + (if (character.onTheHill_) "contre les opposants" else "contre le pouvoir")
+        val donationMessage = "$count_money \uD83D\uDCB6 reçu(s)"
+        val votesMessage = "$count_vote \uD83D\uDDF3️ récolté(s)"
+        val outHillMessage = if(out_of_hill.size > 0) "Démission de " + out_of_hill.joinToString(separator = ", ") { it.name_ } else "Aucun politique n'a démissionné"
 
         communicator.dialog(
-            consequencesMessage(dice),
+            lifeMessage + "\n" + donationMessage + "\n" + votesMessage + "\n" + attackMessage + "\n" + outHillMessage,
             character.name_ + (if (character.isThePlayer_) " (Vous)" else "")
         )
 
-    }
-
-    private fun consequencesMessage(dice: List<String>): String {
-        Log.d("dice", dice.toString())
-
-        val lifeMessage = dice.count { it == "♥" }.toString() + " ♥ récolté(s)"
-        val attackMessage = dice.count { it == "❗" }.toString() + " ❗ commis"
-        val donationMessage = dice.count { it == "\uD83D\uDCB6"}.toString() + " \uD83D\uDCB6 reçu(s)"
-
-        val totalVotes = countVotes(dice)
-        val votesMessage = totalVotes.toString() + " \uD83D\uDDF3️ récolté(s)"
-
-        return lifeMessage + "\n" + donationMessage + "\n" + votesMessage + "\n" + attackMessage
-    }
-
-    private fun countVotes(dice: List<String>): Int {
-        var totalVotes = 0
-        var tripletHasBeenMade = false
-        var tripletValue = 0
-
-        if (dice.count { it == "1" } >= 3) {
-            totalVotes += 1
-            tripletHasBeenMade = true
-            tripletValue = 1
-        } else if (dice.count { it == "2" } >= 3) {
-            totalVotes += 2
-            tripletHasBeenMade = true
-            tripletValue = 2
-
-        } else if (dice.count { it == "3" } >= 3) {
-            totalVotes += 3
-            tripletHasBeenMade = true
-            tripletValue = 3
-        }
-
-        if (tripletHasBeenMade) {
-            if (tripletValue == 1) {
-                totalVotes += (dice.count { it == "1" } - 3)
-            } else if (tripletValue == 2) {
-                totalVotes += (dice.count { it == "2" } - 3)
-            } else {
-                totalVotes += (dice.count { it == "3" } - 3)
-            }
-        }
-        return totalVotes
     }
 
     fun getAllNonPlayerCharacters(): List<Character> {
