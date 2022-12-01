@@ -173,8 +173,7 @@ class GameBoard : Fragment() {
                             character.incrementVictoryPoints(2)
                             gameBrain.hillTurn = gameBrain.nbTurn
                         }
-                        val hillCapacity = if(gameBrain.characters.filter { it.lifePoints_.value!! > 0 }.size > 4) 2 else 1
-                        if(!character.onTheHill_ && gameBrain.hill.value?.size!! < hillCapacity){
+                        if(!character.onTheHill_ && gameBrain.hill.value?.size!! < gameBrain.getHillCapacity()){
                             gameBrain.addToHill(character)
                         }
                         // Is he the player ?
@@ -228,7 +227,13 @@ class GameBoard : Fragment() {
                         }
                     }
 
+                    //check for hill capacity after all attack
+                    if(gameBrain.hill.value?.size!! > gameBrain.getHillCapacity()){
+                        gameBrain.removeFromHill(gameBrain.characters.first { it.onTheHill_ })
+                    }
+
                     for (loopedCharacter in gameBrain.characters) {
+
                         // The player is the last standing
                         if (loopedCharacter.lifePoints_.value!! > 0 && loopedCharacter.isThePlayer_ &&
                             gameBrain.getAllNonPlayerCharacters().sumOf { it.lifePoints_.value!! } == 0

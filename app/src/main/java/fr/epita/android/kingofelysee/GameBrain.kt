@@ -152,4 +152,9 @@ class GameBrain : ViewModel() {
         return this.characters.filter { c -> !c.isThePlayer_ }
     }
 
+
+    fun getHillCapacity(): Int {
+        return if(characters.filter { it.lifePoints_.value!! > 0 }.size > 4) 2 else 1
+    }
+
 }
