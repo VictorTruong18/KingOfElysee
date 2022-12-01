@@ -22,6 +22,7 @@ import androidx.navigation.fragment.findNavController
 import fr.epita.android.kingofelysee.sections.MapFragment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import fr.epita.android.kingofelysee.objects.Character
 
 
 class GameBoard : Fragment() {
@@ -224,7 +225,7 @@ class GameBoard : Fragment() {
                             Log.d("Game has ended", "Another player has won")
                             displayEndMessage(
                                 "Honte à vous ! ",
-                                "Vous n'avez pas réussi·e à sauver la France "
+                                "Vous n'avez pas réussi·e à sauver la France."
                             )
                             gameBrain.partyStarted = false
                         }
@@ -245,7 +246,7 @@ class GameBoard : Fragment() {
                             Log.d("Game has ended", "The player has no life points left")
                             displayEndMessage(
                                 "Honte à vous ! ",
-                                "Vous n'avez pas réussi·e à sauver la France"
+                                "Vous n'avez pas réussi·e à sauver la France."
                             )
                             gameBrain.partyStarted = false
                         }
@@ -263,6 +264,15 @@ class GameBoard : Fragment() {
         }
     }
 
+    private fun getRankingMessage(characters: List<Character>): String {
+        val sortedCharacters = characters.sortedByDescending { it.victoryPoints_.value!! }
+        var message =""
+        for (character in sortedCharacters) {
+            message += character.name_ + "  " +character.victoryPoints_.value!! + " \uD83D\uDDF3 \n"
+        }
+        return message
+    }
+
     fun displayEndMessage(title: String, msg: String) {
         activity?.let {
             val builder = AlertDialog.Builder(it)
@@ -274,7 +284,7 @@ class GameBoard : Fragment() {
                     findNavController().navigate(R.id.action_gameBoard_to_gameMenu)
                 }
             }
-            builder.setMessage(msg)
+            builder.setMessage(msg + "\n" + getRankingMessage(gameBrain.characters))
                 .setTitle(title)
 
             // Create the AlertDialog
