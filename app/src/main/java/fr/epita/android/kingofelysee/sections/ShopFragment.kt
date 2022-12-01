@@ -1,18 +1,18 @@
 package fr.epita.android.kingofelysee.sections
 
-import android.media.Image
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
+import androidx.fragment.app.activityViewModels
+import fr.epita.android.kingofelysee.GameBrain
 import fr.epita.android.kingofelysee.R
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import fr.epita.android.kingofelysee.objects.Card
+import fr.epita.android.kingofelysee.objects.Effect
 
 /**
  * A simple [Fragment] subclass.
@@ -20,8 +20,10 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class ShopFragment : Fragment() {
-    lateinit var card1: ImageView
-    lateinit var card2: ImageView
+    private val gameBrain: GameBrain by activityViewModels()
+
+    lateinit var card1: Card
+    lateinit var card2: Card
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,11 +39,58 @@ class ShopFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        gameBrain.shopCards.observe(this.viewLifecycleOwner) {
+            val cards = gameBrain.shopCards
 
-        card1 = view.findViewById(R.id.card1Image)
-        card2 = view.findViewById(R.id.card2Image)
+            this.card1 = cards.value!!.first
+            this.card2 = cards.value!!.second
 
-        card1.setImageResource(R.drawable.bogoss)
-        card2.setImageResource(R.drawable.bogoss)
+            view.findViewById<ImageView>(R.id.card1Image).setImageResource(this.card1.id)
+            view.findViewById<ImageView>(R.id.card2Image).setImageResource(this.card2.id)
+        }
+
+        view.findViewById<Button>(R.id.reset_shop_button).setOnClickListener {
+            gameBrain.renewShopCards()
+        }
+
+        view.findViewById<Button>(R.id.shop_buy_card_1).setOnClickListener {
+            val card = gameBrain.shopCards.value!!.first
+            val player = gameBrain.characters[gameBrain.characterTurnIndex]
+            if (card.effect == Effect.IMMEDIATE) {
+                if (card.hasToChooseTarget) {
+                    val dialog = ChooseTargetDialogFragment(card, 0)
+                    dialog.show(this.parentFragmentManager, "Toto")
+                } else {
+                    gameBrain.useShopCard(0, player)
+                }
+            } else {
+                gameBrain.buyCard(0)
+            }
+        }
+
+        view.findViewById<Button>(R.id.shop_buy_card_2).setOnClickListener {
+            val card = gameBrain.shopCards.value!!.second
+            val player = gameBrain.characters[gameBrain.characterTurnIndex]
+            if (card.effect == Effect.IMMEDIATE) {
+                if (card.hasToChooseTarget) {
+                    val dialog = ChooseTargetDialogFragment(card, 1)
+                    dialog.show(this.parentFragmentManager, "Toto")
+                } else {
+                    gameBrain.useShopCard(1, player)
+                }
+            } else {
+                gameBrain.buyCard(1)
+            }
+        }
+    }
+
+    private fun updateShopViews(view: View) {
+        val cards = gameBrain.shopCards
+
+        this.card1 = cards.value!!.first
+        this.card2 = cards.value!!.second
+
+        view.findViewById<ImageView>(R.id.card1Image).setImageResource(this.card1.id)
+        view.findViewById<ImageView>(R.id.card2Image).setImageResource(this.card2.id)
     }
 }

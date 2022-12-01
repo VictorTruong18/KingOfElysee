@@ -46,7 +46,8 @@ class MainActivity : AppCompatActivity(), Communicator {
 
     private fun animateMainFragmentToFullScreen() {
         val profile : View = findViewById(R.id.profile_0)
-        defaultProfileHeight = profile.layoutParams.height
+        if (defaultScrollHeight == 0)
+            defaultProfileHeight = profile.layoutParams.height
 
         val slideAnimator: ValueAnimator = ValueAnimator
             .ofInt(defaultProfileHeight, 0)
@@ -71,7 +72,7 @@ class MainActivity : AppCompatActivity(), Communicator {
         defaultScrollHeight = scroll.layoutParams.height
         val slideAnimator2: ValueAnimator = ValueAnimator
             .ofInt(defaultScrollHeight, 0)
-            .setDuration(1000);
+            .setDuration(1000)
 
         slideAnimator2.addUpdateListener {
             val value: Int = it.animatedValue as Int

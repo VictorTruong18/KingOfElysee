@@ -23,6 +23,18 @@ class Character(
     var canResignTurn_ : Int = -1
     var lastPlayTurn_ : Int = -1
 
+    var cards = MutableLiveData(mutableListOf<Card>())
+
+    fun addCard(card: Card) {
+        this.cards.value!!.add(card)
+        cards.value = cards.value
+    }
+
+    fun removeCard(card: Card) {
+        this.cards.value!!.remove(card)
+        cards.value = cards.value
+    }
+
     fun incrementLifePoints(lifepoints : Int): Int{
         var lf = lifepoints
         if(this.lifePoints_.value!! + lifepoints > 10)

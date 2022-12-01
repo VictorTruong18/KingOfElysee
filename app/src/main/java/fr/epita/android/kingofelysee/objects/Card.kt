@@ -1,16 +1,24 @@
 package fr.epita.android.kingofelysee.objects
 
-abstract class Card (val usable: Usable, val on: Effect, val characters: List<Character>, val drawableId: Int) {
-    abstract fun use()
-}
 
-enum class Usable {
-    IMMEDIATELY,
-    DELAYED
+
+data class Card(val id: Int, val effect: Effect, val hasToChooseTarget: Boolean) {
+
+    // Only for optimization, might be totally overkill
+    override fun equals(other: Any?): Boolean {
+        if (other == null) return false
+
+        val otherAsCard = other as Card
+
+        return otherAsCard.id == this.id
+    }
+
+    override fun hashCode(): Int {
+        return this.id.hashCode()
+    }
 }
 
 enum class Effect {
-    ON_ONE_ENEMY,
-    ON_ME,
-    ON_EVERYONE
+    IMMEDIATE,
+    DELAYED
 }
