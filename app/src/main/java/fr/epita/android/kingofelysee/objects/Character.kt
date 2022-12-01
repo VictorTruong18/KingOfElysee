@@ -20,7 +20,8 @@ class Character(
     var energyPoints_ = MutableLiveData<Int>(ENERGY_POINTS)
     var victoryPoints_ = MutableLiveData<Int>(VICTORY_POINTS)
     var onTheHill_ : Boolean = false
-    var isMyTurn_ : Boolean = false
+    var canResignTurn_ : Int = -1
+    var lastPlayTurn_ : Int = -1
 
     var cards = MutableLiveData(mutableListOf<Card>())
 
@@ -34,16 +35,25 @@ class Character(
         cards.value = cards.value
     }
 
-    fun incrementLifePoints(lifepoints : Int){
-        this.lifePoints_.postValue(this.lifePoints_.value!!.plus(lifepoints))
+    fun incrementLifePoints(lifepoints : Int): Int{
+        var lf = lifepoints
+        if(this.lifePoints_.value!! + lifepoints > 10)
+            lf = 10 - this.lifePoints_.value!!
+        this.lifePoints_.postValue(this.lifePoints_.value!!.plus(lf))
+        return lf
     }
 
-    fun incrementEnergyPoints(energypoints : Int){
+    fun incrementEnergyPoints(energypoints : Int): Int{
         this.energyPoints_.postValue(this.energyPoints_.value!!.plus(energypoints))
+        return energypoints
     }
 
-    fun incrementVictoryPoints(victorypoints : Int){
-        this.victoryPoints_.postValue(this.victoryPoints_.value!!.plus(victorypoints))
+    fun incrementVictoryPoints(victorypoints : Int): Int{
+        var vt = victorypoints
+        if(this.victoryPoints_.value!! + victorypoints > 20)
+            vt = 20 - this.victoryPoints_.value!!
+        this.victoryPoints_.postValue(this.victoryPoints_.value!!.plus(vt))
+        return vt
     }
 
 }

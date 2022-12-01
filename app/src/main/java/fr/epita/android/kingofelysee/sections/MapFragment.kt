@@ -1,47 +1,26 @@
 package fr.epita.android.kingofelysee.sections
 
-import android.graphics.ColorMatrix
-import android.graphics.ColorMatrixColorFilter
-import android.graphics.Paint
-import android.graphics.Typeface
+import android.graphics.*
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import fr.epita.android.kingofelysee.GameBrain
 import fr.epita.android.kingofelysee.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MapFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MapFragment : Fragment() {
     private val gameBrain : GameBrain by activityViewModels()
     lateinit var hillImg1View : ImageView
     lateinit var hillImg2View : ImageView
-
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    lateinit var hillBtn : Button
+    lateinit var nextBtn : Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +32,23 @@ class MapFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        hillBtn = view.findViewById(R.id.hill_button)
+        hillBtn.visibility = View.GONE
+        hillBtn.setOnClickListener {
+            val current = gameBrain.characters.filter { c -> c.isThePlayer_ }.first()
+            if(current.onTheHill_){
+                gameBrain.removeFromHill(current)
+            }else{
+                gameBrain.addToHill(current)
+            }
+            gameBrain.waitNext.value = gameBrain.waitNext.value
+        }
+        nextBtn = view.findViewById(R.id.next_button)
+        nextBtn.setOnClickListener {
+            gameBrain.waitNext.postValue(false)
+        }
+        nextBtn.isClickable = false
 
         hillImg1View = view.findViewById(R.id.hill_img_1)
         hillImg2View = view.findViewById(R.id.hill_img_2)
@@ -71,25 +67,36 @@ class MapFragment : Fragment() {
                 }
             }
         })
-    }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MapFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MapFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        gameBrain.waitNext.observe(viewLifecycleOwner, Observer { it ->
+            if(!it) {
+                nextBtn.alpha = .5F
+                nextBtn.isClickable = false
+            } else {
+                nextBtn.alpha = 1F
+                nextBtn.isClickable = true
             }
+            val character = gameBrain.characters[gameBrain.characterTurnIndex]
+            val player = gameBrain.characters.filter { c -> c.isThePlayer_ }.first()
+            if(character.isThePlayer_&& gameBrain.nbTurn > 0){
+                if(character.onTheHill_){
+                    hillBtn.visibility = View.VISIBLE
+                    hillBtn.text = "Démissionner"
+                    hillBtn.setBackgroundColor(Color.RED)
+                } else if(gameBrain.hill.value?.size!! < 2){
+                    hillBtn.visibility = View.VISIBLE
+                    hillBtn.text = "Prendre le pouvoir"
+                    hillBtn.setBackgroundColor(resources.getColor(R.color.blue_500))
+                } else {
+                    hillBtn.visibility = View.GONE
+                }
+            }else if(player.canResignTurn_ == gameBrain.nbTurn && player.onTheHill_) {
+                hillBtn.visibility = View.VISIBLE
+                hillBtn.text = "Démissionner"
+                hillBtn.setBackgroundColor(Color.RED)
+            }else{
+                hillBtn.visibility = View.GONE
+            }
+        })
     }
 }

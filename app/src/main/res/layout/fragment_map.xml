@@ -25,12 +25,12 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:visibility="gone"
-        app:shapeAppearanceOverlay="@style/rounded_corner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/hill_img_1"
         app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/rounded_corner"
         tools:src="@tools:sample/avatars" />
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -38,12 +38,37 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:visibility="gone"
-        app:shapeAppearanceOverlay="@style/rounded_corner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/hill_img_2"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/rounded_corner"
         tools:src="@tools:sample/avatars" />
+
+    <Button
+        android:id="@+id/hill_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#FF1744"
+        android:text="HILL"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/next_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/next_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Tour suivant"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/hill_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.os.Build
 import android.os.Bundle
+import android.text.Spanned
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
@@ -112,7 +113,7 @@ class MainActivity : AppCompatActivity(), Communicator {
 
         val transaction = this.supportFragmentManager.beginTransaction()
         transaction.replace(R.id.mainFragment, GameDice())
-        transaction.commit()
+        transaction.commitNow()
     }
 
     override fun unloadFragment() {
@@ -158,12 +159,12 @@ class MainActivity : AppCompatActivity(), Communicator {
         animationSet2.startDelay = 300
 
         val gameStatus: TextView = findViewById(R.id.game_status)
-        // TODO Change later
+        gameStatus.text = "Alors reprenons..."
 
         val myCardsButton: Button = findViewById(R.id.mycards_button)
         myCardsButton.visibility = View.VISIBLE
 
-        if(gameBrain.characters[gameBrain.characterTurnIndex].isThePlayer_){
+        if(gameBrain.characters[gameBrain.characterTurnIndex].isThePlayer_ && gameBrain.characters[gameBrain.characterTurnIndex].lastPlayTurn_ < gameBrain.nbTurn){
             loadDiceFragment()
         }else{
             loadMap()
@@ -187,18 +188,36 @@ class MainActivity : AppCompatActivity(), Communicator {
     override fun loadMap() {
         val transaction = this.supportFragmentManager.beginTransaction()
         transaction.replace(R.id.mainFragment, MapFragment())
-        transaction.commit()
+        transaction.commitNow()
     }
 
-    override fun dialog(message : String, title : String) {
+    override fun toggleShopBtn(){
+        val shopButton: Button = findViewById(R.id.shop_button)
+        val myCardsButton: Button = findViewById(R.id.mycards_button)
+        if(shopButton.alpha == .5F) {
+            shopButton.isClickable = true
+            shopButton.alpha = 1F
+            myCardsButton.isClickable = true
+            myCardsButton.alpha = 1F
+        } else {
+            shopButton.isClickable = false
+            shopButton.alpha = .5F
+            myCardsButton.isClickable = false
+            myCardsButton.alpha = .5F
+        }
+    }
+
+    override fun dialog(message: String, title: String, resumeGame: Boolean) {
 
          MaterialAlertDialogBuilder(this)
             .setTitle(title)
             .setMessage(message).setPositiveButton("Compris"){dialog, id ->
-                 this.gameBrain.gamePaused = false
+                 if(resumeGame)
+                    this.gameBrain.gamePaused = false
                  }
              .setOnDismissListener {
-                 this.gameBrain.gamePaused = false
+                 if(resumeGame)
+                     this.gameBrain.gamePaused = false
              }
             .create()
              .show()
