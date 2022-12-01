@@ -4,32 +4,30 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import fr.epita.android.kingofelysee.objects.Character
-import kotlinx.coroutines.delay
 import java.util.*
 import kotlin.random.Random.Default.nextBoolean
-import kotlin.random.Random.Default.nextInt
 
 
-class GameBrain : ViewModel()  {
+class GameBrain : ViewModel() {
     var characters = listOf<Character>()
-    var partyStarted : Boolean = false
-    var characterTurnIndex : Int = (0..5).random()
-    var nbTurn : Int = 0
-    var gamePaused : Boolean = false
+    var partyStarted: Boolean = false
+    var characterTurnIndex: Int = (0..5).random()
+    var nbTurn: Int = 0
+    var gamePaused: Boolean = false
     val hill = MutableLiveData<MutableSet<Character>>()
 
-    fun initAllCharacters(character : Array<Character>){
+    fun initAllCharacters(character: Array<Character>) {
         this.characters = character.toList()
         hill.value = mutableSetOf()
     }
 
-    fun addToHill(character: Character){
+    fun addToHill(character: Character) {
         character.onTheHill_ = true
         hill.value?.add(character)
         hill.value = hill.value
     }
 
-    fun removeFromHill(character: Character){
+    fun removeFromHill(character: Character) {
         character.onTheHill_ = false
         hill.value?.remove(character)
         hill.value = hill.value
@@ -37,7 +35,7 @@ class GameBrain : ViewModel()  {
 
     fun play(character: Character, dice: List<String>, communicator: Communicator) {
         gamePaused = true
-        if(character.isThePlayer_){
+        if (character.isThePlayer_) {
             communicator.loadMap()
         }
         val count_attack = dice.count { it == "❗" }
@@ -64,8 +62,56 @@ class GameBrain : ViewModel()  {
         character.incrementVictoryPoints(0)
 
 
-        communicator.dialog(dice.toString(),character.name_+(if(character.isThePlayer_) " (Vous)" else ""))
-        
+        communicator.dialog(
+            consequencesMessage(dice),
+            character.name_ + (if (character.isThePlayer_) " (Vous)" else "")
+        )
+
+    }
+
+    private fun consequencesMessage(dice: List<String>): String {
+        Log.d("dice", dice.toString())
+
+        val lifeMessage = dice.count { it == "♥" }.toString() + " ♥ récolté(s)"
+        val attackMessage = dice.count { it == "❗" }.toString() + " ❗ commis"
+        val donationMessage = dice.count { it == "\uD83D\uDCB6"}.toString() + " \uD83D\uDCB6 reçu(s)"
+
+        val totalVotes = countVotes(dice)
+        val votesMessage = totalVotes.toString() + " \uD83D\uDDF3️ récolté(s)"
+
+        return lifeMessage + "\n" + donationMessage + "\n" + votesMessage + "\n" + attackMessage
+    }
+
+    private fun countVotes(dice: List<String>): Int {
+        var totalVotes = 0
+        var tripletHasBeenMade = false
+        var tripletValue = 0
+
+        if (dice.count { it == "1" } >= 3) {
+            totalVotes += 1
+            tripletHasBeenMade = true
+            tripletValue = 1
+        } else if (dice.count { it == "2" } >= 3) {
+            totalVotes += 2
+            tripletHasBeenMade = true
+            tripletValue = 2
+
+        } else if (dice.count { it == "3" } >= 3) {
+            totalVotes += 3
+            tripletHasBeenMade = true
+            tripletValue = 3
+        }
+
+        if (tripletHasBeenMade) {
+            if (tripletValue == 1) {
+                totalVotes += (dice.count { it == "1" } - 3)
+            } else if (tripletValue == 2) {
+                totalVotes += (dice.count { it == "2" } - 3)
+            } else {
+                totalVotes += (dice.count { it == "3" } - 3)
+            }
+        }
+        return totalVotes
     }
 
     fun getAllNonPlayerCharacters(): List<Character> {
