@@ -50,8 +50,10 @@ class GameBrain : ViewModel()  {
         val card = if (cardNbr == 0) shopCards.value!!.first else shopCards.value!!.second
 
         // TODO FEEDBACK
-        if (currentPlayer.cards.size >= 6) return
-        currentPlayer.cards.add(card)
+        if (currentPlayer.cards.value!!.size >= 6) return
+
+        currentPlayer.addCard(card)
+        //currentPlayer.cards.value!!.add(card)
 
         if (cardNbr == 0) {
             this.shopCards.value = Pair(cardsManager.getRandomCard(), this.shopCards.value!!.second)
@@ -60,23 +62,29 @@ class GameBrain : ViewModel()  {
         }
     }
 
-    fun useShopCard(cardNbr: Int, user: Character, target: Character? = null) : Boolean {
+    fun useShopCard(cardNbr: Int, user: Character, target: Character? = null) : Feedback {
         val card = if (cardNbr == 0) shopCards.value!!.first else shopCards.value!!.second
 
-        if (cardNbr == 0) {
-            Log.d("Lounes", "Removed card 0")
-            this.shopCards.value = Pair(cardsManager.getRandomCard(), this.shopCards.value!!.second)
-        } else {
-            Log.d("Lounes", "Removed card 1")
-            this.shopCards.value = Pair(this.shopCards.value!!.first, cardsManager.getRandomCard())
+        val feedback = cardsManager.useCard(card, user, target, this.characters)
+
+        if (feedback == Feedback.VALID) {
+            if (cardNbr == 0) {
+                this.shopCards.value =
+                    Pair(cardsManager.getRandomCard(), this.shopCards.value!!.second)
+            } else {
+                this.shopCards.value =
+                    Pair(this.shopCards.value!!.first, cardsManager.getRandomCard())
+            }
         }
-
-        Log.d("Lounes", "In useShopCard")
-
-        return cardsManager.useCard(card, user, target, this.characters)
+        return feedback
     }
 
-    fun useCard(card: Card, user: Character, target: Character? = null) : Boolean {
-        return cardsManager.useCard(card, user, target, this.characters)
+    fun useCard(card: Card, user: Character, target: Character? = null) : Feedback {
+        val feedback = cardsManager.useCard(card, user, target, this.characters)
+        if (feedback == Feedback.VALID) {
+            Log.d("Lounes", "Used card")
+            user.removeCard(card)
+        }
+        return feedback
     }
 }

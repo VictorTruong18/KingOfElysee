@@ -1,6 +1,7 @@
 package fr.epita.android.kingofelysee.sections
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,23 +44,26 @@ class MyCardsFragment : Fragment() {
         )
 
         val player = gameBrain.characters[gameBrain.characterTurnIndex]
+        player.cards.observe(this.viewLifecycleOwner) {
+            it.forEachIndexed { i, card ->
+                imagesAndButtons[i].first.setImageResource(card.id)
+                imagesAndButtons[i].second.setOnClickListener {
+                    if (card.hasToChooseTarget) {
+                        val dialog = ChooseTargetDialogFragment(card, null)
+                        dialog.show(this.parentFragmentManager, "Toto")
+                    } else {
+                        gameBrain.useCard(card, player)
+                    }
+                }
 
-        player.cards.forEachIndexed { i, card ->
-            imagesAndButtons[i].first.setImageResource(card.id)
-            imagesAndButtons[i].second.setOnClickListener {
-                if (card.hasToChooseTarget) {
-                    val dialog = ChooseTargetDialogFragment(card)
-                    dialog.show(this.parentFragmentManager, "Toto")
-                } else {
-                    gameBrain.useCard(card, player)
+                imagesAndButtons.subList(it.size, imagesAndButtons.size).forEach { pair ->
+                    pair.first.visibility = View.GONE
+                    pair.second.visibility = View.GONE
                 }
             }
         }
 
 
-        imagesAndButtons.subList(player.cards.size, imagesAndButtons.size).forEach {
-            it.first.visibility = View.GONE
-            it.second.visibility = View.GONE
-        }
+
     }
 }

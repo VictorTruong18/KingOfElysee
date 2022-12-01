@@ -11,9 +11,9 @@ class CardsManager() {
         Card(R.drawable.bad_coke, Effect.IMMEDIATE, true),
         Card(R.drawable.bogoss, Effect.DELAYED, false),
         Card(R.drawable.bollore, Effect.IMMEDIATE, false),
-        Card(R.drawable.casseroles, Effect.DELAYED, false),
+        Card(R.drawable.casseroles, Effect.DELAYED, true),
         Card(R.drawable.cauchemar, Effect.IMMEDIATE, true),
-        Card(R.drawable.cgt, Effect.DELAYED, false),
+        Card(R.drawable.cgt, Effect.DELAYED, true),
         Card(R.drawable.chinois, Effect.IMMEDIATE, false),
         Card(R.drawable.coke, Effect.IMMEDIATE, false),
         Card(R.drawable.don, Effect.DELAYED, true),
@@ -29,8 +29,8 @@ class CardsManager() {
         Card(R.drawable.valls, Effect.IMMEDIATE, true),
     )
 
-    fun useCard(card: Card, user: Character, target: Character? = null, characters: List<Character>) : Boolean {
-        if (card.hasToChooseTarget && target == null) return false
+    fun useCard(card: Card, user: Character, target: Character? = null, characters: List<Character>) : Feedback {
+        if (card.hasToChooseTarget && target == null) return Feedback.HAS_TO_CHOOSE_TARGET
 
         // From now on we know that if we need a target its not going to be null
         when (card.id) {
@@ -54,7 +54,7 @@ class CardsManager() {
             R.drawable.vacances -> return vacancesEffect(user)
             R.drawable.valls -> return vallsEffect(target!!)
         }
-        return false
+        throw java.lang.IllegalStateException("It is not theoretically possible to have an id that is not known")
     }
 
     fun getCard(card: Card) : Card? {
@@ -65,12 +65,12 @@ class CardsManager() {
         return cards.elementAt(Random.nextInt(cards.size))
     }
 
-    private fun badCokeEffect(target: Character) : Boolean {
+    private fun badCokeEffect(target: Character) : Feedback {
         target.incrementLifePoints(-2)
-        return true
+        return Feedback.VALID
     }
 
-    private fun bogossEffect(user: Character, characters: List<Character>) : Boolean {
+    private fun bogossEffect(user: Character, characters: List<Character>) : Feedback {
         characters.forEach {
             if (it == user) return@forEach
 
@@ -79,53 +79,54 @@ class CardsManager() {
 
         user.incrementVictoryPoints(3)
 
-        return true
+        return Feedback.VALID
     }
 
-    private fun bolloreEffect(user: Character, characters: List<Character>) : Boolean {
+    private fun bolloreEffect(user: Character, characters: List<Character>) : Feedback {
         characters.forEach {
             if (it == user) return@forEach
 
             it.incrementEnergyPoints(-1)
             it.incrementLifePoints(-1)
         }
-        return true
+        return Feedback.VALID
     }
 
-    private fun casserolesEffect(user: Character, target: Character) : Boolean {
-        if (user.victoryPoints_.value!! > target.victoryPoints_.value!!) {
+    private fun casserolesEffect(user: Character, target: Character) : Feedback {
+        if (target.victoryPoints_.value!! > user.victoryPoints_.value!!) {
             target.incrementVictoryPoints(-2)
-            return true
+            return Feedback.VALID
         }
-        return false
+        return Feedback.TARGET_NOT_ENOUGH_VP
     }
 
-    private fun cauchemarEffect(target: Character) : Boolean {
+    private fun cauchemarEffect(target: Character) : Feedback {
         target.incrementVictoryPoints(-1)
-        return true
+        return Feedback.VALID
     }
 
-    private fun cgtEffect(user: Character, target: Character) : Boolean {
-        if (target.energyPoints_.value!! > user.energyPoints_.value!!) {
+    private fun cgtEffect(user: Character, target: Character) : Feedback {
+        if (target.energyPoints_.value!! > user.energyPoints_.value!! + 2) {
+            Log.d("Lounes", "Target is: ${target.name_}, Energy: ${target.energyPoints_.value}")
             target.incrementEnergyPoints(-2)
             user.incrementEnergyPoints(2)
-            return true
+            return Feedback.VALID
         }
-        return false
+        return Feedback.TARGET_NOT_ENOUGH_ENERGY
     }
 
-    private fun chinoisEffect(user: Character) : Boolean {
+    private fun chinoisEffect(user: Character) : Feedback {
         user.incrementEnergyPoints(5)
-        return true
+        return Feedback.VALID
     }
 
-    private fun cokeEffect(user: Character) : Boolean {
+    private fun cokeEffect(user: Character) : Feedback {
         user.incrementLifePoints(3)
-        return true
+        return Feedback.VALID
     }
 
-    private fun donEffect(user: Character, target: Character) : Boolean {
-        if (user.energyPoints_.value!! < 3) return false
+    private fun donEffect(user: Character, target: Character) : Feedback {
+        if (user.energyPoints_.value!! < 3) return Feedback.USER_NOT_ENOUGH_ENERGY
 
         user.incrementVictoryPoints(1)
         user.incrementEnergyPoints(-3)
@@ -133,69 +134,80 @@ class CardsManager() {
         target.incrementEnergyPoints(3)
         target.incrementVictoryPoints(-1)
 
-        return true
+        return Feedback.VALID
     }
 
-    private fun hannounahEffect(user: Character) : Boolean {
+    private fun hannounahEffect(user: Character) : Feedback {
         user.incrementLifePoints(2)
         user.incrementVictoryPoints(1)
 
-        return true
+        return Feedback.VALID
     }
 
-    private fun inflationEffect(user: Character, characters: List<Character>) : Boolean {
+    private fun inflationEffect(user: Character, characters: List<Character>) : Feedback {
         characters.forEach {
             if (it == user) return@forEach
 
             it.incrementEnergyPoints(-3)
         }
 
-        return true
+        return Feedback.VALID
     }
 
-    private fun interviewBFMEffect(user: Character) : Boolean {
+    private fun interviewBFMEffect(user: Character) : Feedback {
         user.incrementVictoryPoints(2)
-        return true
+        return Feedback.VALID
     }
 
-    private fun masqueEffect(user: Character) : Boolean {
+    private fun masqueEffect(user: Character) : Feedback {
+        if (user.victoryPoints_.value!! < 2) return Feedback.USER_NOT_ENOUGH_VP
         user.incrementLifePoints(2)
         user.incrementVictoryPoints(-2)
-        return true
+        return Feedback.VALID
     }
 
-    private fun mcflyEffect(user: Character) : Boolean {
+    private fun mcflyEffect(user: Character) : Feedback {
         user.incrementVictoryPoints(2)
-        return true
+        return Feedback.VALID
     }
 
-    private fun mckinseyEffect(user: Character) : Boolean {
-        if (user.energyPoints_.value!! < 3) return false
+    private fun mckinseyEffect(user: Character) : Feedback {
+        if (user.energyPoints_.value!! < 3) return Feedback.USER_NOT_ENOUGH_ENERGY
 
         user.incrementEnergyPoints(-3)
         user.incrementVictoryPoints(1)
-        return true
+        return Feedback.VALID
     }
 
-    private fun perlimpinpinEffect(user: Character, target: Character) : Boolean {
+    private fun perlimpinpinEffect(user: Character, target: Character) : Feedback {
         user.incrementLifePoints(1)
         target.incrementVictoryPoints(-1)
-        return true
+        return Feedback.VALID
     }
 
-    private fun pieceEffect(user: Character) : Boolean {
+    private fun pieceEffect(user: Character) : Feedback {
         user.incrementEnergyPoints(3)
-        return true
+        return Feedback.VALID
     }
 
-    private fun vacancesEffect(user: Character) : Boolean {
+    private fun vacancesEffect(user: Character) : Feedback {
         user.incrementLifePoints(2)
         user.incrementVictoryPoints(-1)
-        return true
+        return Feedback.VALID
     }
 
-    private fun vallsEffect(target: Character) : Boolean {
+    private fun vallsEffect(target: Character) : Feedback {
         target.incrementVictoryPoints(-1)
-        return true
+        return Feedback.VALID
     }
+}
+
+enum class Feedback {
+    VALID,
+    HAS_TO_CHOOSE_TARGET,
+    TARGET_NOT_ENOUGH_ENERGY,
+    TARGET_NOT_ENOUGH_VP,
+    USER_NOT_ENOUGH_HP,
+    USER_NOT_ENOUGH_ENERGY,
+    USER_NOT_ENOUGH_VP
 }

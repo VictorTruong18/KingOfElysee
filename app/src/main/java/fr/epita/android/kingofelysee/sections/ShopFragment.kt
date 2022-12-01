@@ -74,6 +74,7 @@ class ShopFragment : Fragment() {
             if (card.effect == Effect.IMMEDIATE) {
                 if (card.hasToChooseTarget) {
                     val dialog = ChooseTargetDialogFragment(card, 1)
+                    dialog.show(this.parentFragmentManager, "Toto")
                 } else {
                     gameBrain.useShopCard(1, player)
                 }

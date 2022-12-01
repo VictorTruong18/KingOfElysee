@@ -24,21 +24,19 @@ class ChooseTargetDialogFragment(private val card: Card, private val fromShop: I
                     .map { it.name_ }
                     .toTypedArray()) { dialog, which ->
                         if (fromShop != null) {
-                            Log.d("Lounes", "Bundle not null")
-
-                            gameBrain.useShopCard(
+                            val feedback = gameBrain.useShopCard(
                                 fromShop,
                                 gameBrain.getCurrentPlayer(),
                                 gameBrain.getPlayersWithoutCurrentPlayer()[which]
                             )
                         } else {
-                            Log.d("Lounes", "Bundle null")
-                            gameBrain.useCard(
+                            val feedback = gameBrain.useCard(
                                 card,
                                 gameBrain.getCurrentPlayer(),
                                 gameBrain.getPlayersWithoutCurrentPlayer()[which]
                             )
-                            gameBrain.getCurrentPlayer().cards.remove(card)
+                            gameBrain.getCurrentPlayer().removeCard(card)
+                            //gameBrain.getCurrentPlayer().cards.value!!.remove(card)
                         }
                 }
             builder.create()
