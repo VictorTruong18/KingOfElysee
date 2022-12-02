@@ -63,7 +63,6 @@ class ShopFragment : Fragment() {
                     dialog.show(this.parentFragmentManager, "Toto")
                 } else {
                     gameBrain.useShopCard(0, player)
-                    displayFeedbackModal("Carte ajoutée")
                 }
             } else {
                 gameBrain.buyCard(0)
@@ -80,7 +79,6 @@ class ShopFragment : Fragment() {
                     dialog.show(this.parentFragmentManager, "Toto")
                 } else {
                     gameBrain.useShopCard(1, player)
-                    displayFeedbackModal("Carte ajoutée")
                 }
             } else {
                 gameBrain.buyCard(1)
