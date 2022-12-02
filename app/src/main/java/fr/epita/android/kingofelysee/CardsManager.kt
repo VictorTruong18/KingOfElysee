@@ -7,29 +7,99 @@ import fr.epita.android.kingofelysee.objects.Character
 import kotlin.random.Random
 
 class CardsManager() {
-    private val cards = setOf (
-        Card(R.drawable.bad_coke, Effect.IMMEDIATE, true),
-        Card(R.drawable.bogoss, Effect.DELAYED, false),
-        Card(R.drawable.bollore, Effect.IMMEDIATE, false),
-        Card(R.drawable.casseroles, Effect.DELAYED, true),
-        Card(R.drawable.cauchemar, Effect.IMMEDIATE, true),
-        Card(R.drawable.cgt, Effect.DELAYED, true),
-        Card(R.drawable.chinois, Effect.IMMEDIATE, false),
-        Card(R.drawable.coke, Effect.IMMEDIATE, false),
-        Card(R.drawable.don, Effect.DELAYED, true),
-        Card(R.drawable.hannounah, Effect.IMMEDIATE, false),
-        Card(R.drawable.inflation, Effect.IMMEDIATE, false),
-        Card(R.drawable.interview_bfm, Effect.IMMEDIATE, false),
-        Card(R.drawable.masque, Effect.IMMEDIATE, false),
-        Card(R.drawable.mcfly, Effect.IMMEDIATE, false),
-        Card(R.drawable.mckinsey, Effect.DELAYED, false),
-        Card(R.drawable.perlimpimpin, Effect.IMMEDIATE, true),
-        Card(R.drawable.pieces, Effect.IMMEDIATE, false),
-        Card(R.drawable.vacances, Effect.IMMEDIATE, false),
-        Card(R.drawable.valls, Effect.IMMEDIATE, true),
+    private val cards = setOf(
+        Card(R.drawable.bad_coke, Effect.IMMEDIATE, true, "%TARGET% perd deux points de vie"),
+        Card(
+            R.drawable.bogoss,
+            Effect.DELAYED,
+            false,
+            "Bravo, vous avez gagné trois votes et fait perdre un point de vie à vos adversaires !"
+        ),
+        Card(
+            R.drawable.bollore,
+            Effect.IMMEDIATE,
+            false,
+            "Bravo, vous avez fait perdre un point de vie et un vote à vos adversaires !"
+        ),
+        Card(
+            R.drawable.casseroles,
+            Effect.DELAYED,
+            true,
+            "Bravo, vous avez fait perdre deux votes à chaque adversaire en ayant plus que vous !"
+        ),
+        Card(R.drawable.cauchemar, Effect.IMMEDIATE, true, "%TARGET% perd un vote"),
+        Card(
+            R.drawable.cgt,
+            Effect.DELAYED,
+            true,
+            "Bravo, grâce à la CGT, vous ne vous faites plus de soucis !"
+        ),
+        Card(
+            R.drawable.chinois,
+            Effect.IMMEDIATE,
+            false,
+            "Bravo, vous gagnez cinq sous grâce à la Chine !"
+        ),
+        Card(R.drawable.coke, Effect.IMMEDIATE, false, "Bravo, vous avez fait le plein d'énergie"),
+        Card(
+            R.drawable.don,
+            Effect.DELAYED,
+            true,
+            "Vous faites un arrangement avec %TARGET% et gagnez un de ses votes."
+        ),
+        Card(
+            R.drawable.hannounah,
+            Effect.IMMEDIATE,
+            false,
+            "Bravo, vous avez gagné un vote et un point de vie."
+        ),
+        Card(
+            R.drawable.inflation,
+            Effect.IMMEDIATE,
+            false,
+            "Bravo, tous vos adversaires perdent trois sous !"
+        ),
+        Card(
+            R.drawable.interview_bfm,
+            Effect.IMMEDIATE,
+            false,
+            "Bravo, vous avez gagné deux votes !"
+        ),
+        Card(
+            R.drawable.masque,
+            Effect.IMMEDIATE,
+            false,
+            "Bravo, vous gagnez deux points de vie mais perdez deux votes !"
+        ),
+        Card(R.drawable.mcfly, Effect.IMMEDIATE, false, "Bravo, vous avez gagné 2 votes !"),
+        Card(
+            R.drawable.mckinsey,
+            Effect.DELAYED,
+            false,
+            "Vous avez gagné un vote grâce à l'expertise de McKinsey."
+        ),
+        Card(
+            R.drawable.perlimpimpin,
+            Effect.IMMEDIATE,
+            true,
+            "%TARGET% perd un vote et vous gagnez un point de vie."
+        ),
+        Card(R.drawable.pieces, Effect.IMMEDIATE, false, "Bravo, vous gagnez trois sous !"),
+        Card(
+            R.drawable.vacances,
+            Effect.IMMEDIATE,
+            false,
+            "Vous gagnez deux points deux vie mais perdez un vote."
+        ),
+        Card(R.drawable.valls, Effect.IMMEDIATE, true, "%TARGET% perd un vote."),
     )
 
-    fun useCard(card: Card, user: Character, target: Character? = null, characters: List<Character>) : Feedback {
+    fun useCard(
+        card: Card,
+        user: Character,
+        target: Character? = null,
+        characters: List<Character>
+    ): Feedback {
         if (card.hasToChooseTarget && target == null) return Feedback.HAS_TO_CHOOSE_TARGET
 
         // From now on we know that if we need a target its not going to be null
@@ -57,20 +127,20 @@ class CardsManager() {
         throw java.lang.IllegalStateException("It is not theoretically possible to have an id that is not known")
     }
 
-    fun getCard(card: Card) : Card? {
+    fun getCard(card: Card): Card? {
         return cards.find { it.id == card.id }
     }
 
-    fun getRandomCard() : Card {
+    fun getRandomCard(): Card {
         return cards.elementAt(Random.nextInt(cards.size))
     }
 
-    private fun badCokeEffect(target: Character) : Feedback {
+    private fun badCokeEffect(target: Character): Feedback {
         target.incrementLifePoints(-2)
         return Feedback.VALID
     }
 
-    private fun bogossEffect(user: Character, characters: List<Character>) : Feedback {
+    private fun bogossEffect(user: Character, characters: List<Character>): Feedback {
         characters.forEach {
             if (it == user) return@forEach
 
@@ -82,7 +152,7 @@ class CardsManager() {
         return Feedback.VALID
     }
 
-    private fun bolloreEffect(user: Character, characters: List<Character>) : Feedback {
+    private fun bolloreEffect(user: Character, characters: List<Character>): Feedback {
         characters.forEach {
             if (it == user) return@forEach
 
@@ -92,7 +162,7 @@ class CardsManager() {
         return Feedback.VALID
     }
 
-    private fun casserolesEffect(user: Character, target: Character) : Feedback {
+    private fun casserolesEffect(user: Character, target: Character): Feedback {
         if (target.victoryPoints_.value!! > user.victoryPoints_.value!!) {
             target.incrementVictoryPoints(-2)
             return Feedback.VALID
@@ -100,12 +170,12 @@ class CardsManager() {
         return Feedback.TARGET_NOT_ENOUGH_VP
     }
 
-    private fun cauchemarEffect(target: Character) : Feedback {
+    private fun cauchemarEffect(target: Character): Feedback {
         target.incrementVictoryPoints(-1)
         return Feedback.VALID
     }
 
-    private fun cgtEffect(user: Character, target: Character) : Feedback {
+    private fun cgtEffect(user: Character, target: Character): Feedback {
         if (target.energyPoints_.value!! > user.energyPoints_.value!! + 2) {
             Log.d("Lounes", "Target is: ${target.name_}, Energy: ${target.energyPoints_.value}")
             target.incrementEnergyPoints(-2)
@@ -115,17 +185,17 @@ class CardsManager() {
         return Feedback.TARGET_NOT_ENOUGH_ENERGY
     }
 
-    private fun chinoisEffect(user: Character) : Feedback {
+    private fun chinoisEffect(user: Character): Feedback {
         user.incrementEnergyPoints(5)
         return Feedback.VALID
     }
 
-    private fun cokeEffect(user: Character) : Feedback {
+    private fun cokeEffect(user: Character): Feedback {
         user.incrementLifePoints(3)
         return Feedback.VALID
     }
 
-    private fun donEffect(user: Character, target: Character) : Feedback {
+    private fun donEffect(user: Character, target: Character): Feedback {
         if (user.energyPoints_.value!! < 3) return Feedback.USER_NOT_ENOUGH_ENERGY
 
         user.incrementVictoryPoints(1)
@@ -137,14 +207,14 @@ class CardsManager() {
         return Feedback.VALID
     }
 
-    private fun hannounahEffect(user: Character) : Feedback {
+    private fun hannounahEffect(user: Character): Feedback {
         user.incrementLifePoints(2)
         user.incrementVictoryPoints(1)
 
         return Feedback.VALID
     }
 
-    private fun inflationEffect(user: Character, characters: List<Character>) : Feedback {
+    private fun inflationEffect(user: Character, characters: List<Character>): Feedback {
         characters.forEach {
             if (it == user) return@forEach
 
@@ -154,24 +224,24 @@ class CardsManager() {
         return Feedback.VALID
     }
 
-    private fun interviewBFMEffect(user: Character) : Feedback {
+    private fun interviewBFMEffect(user: Character): Feedback {
         user.incrementVictoryPoints(2)
         return Feedback.VALID
     }
 
-    private fun masqueEffect(user: Character) : Feedback {
+    private fun masqueEffect(user: Character): Feedback {
         if (user.victoryPoints_.value!! < 2) return Feedback.USER_NOT_ENOUGH_VP
         user.incrementLifePoints(2)
         user.incrementVictoryPoints(-2)
         return Feedback.VALID
     }
 
-    private fun mcflyEffect(user: Character) : Feedback {
+    private fun mcflyEffect(user: Character): Feedback {
         user.incrementVictoryPoints(2)
         return Feedback.VALID
     }
 
-    private fun mckinseyEffect(user: Character) : Feedback {
+    private fun mckinseyEffect(user: Character): Feedback {
         if (user.energyPoints_.value!! < 3) return Feedback.USER_NOT_ENOUGH_ENERGY
 
         user.incrementEnergyPoints(-3)
@@ -179,24 +249,24 @@ class CardsManager() {
         return Feedback.VALID
     }
 
-    private fun perlimpinpinEffect(user: Character, target: Character) : Feedback {
+    private fun perlimpinpinEffect(user: Character, target: Character): Feedback {
         user.incrementLifePoints(1)
         target.incrementVictoryPoints(-1)
         return Feedback.VALID
     }
 
-    private fun pieceEffect(user: Character) : Feedback {
+    private fun pieceEffect(user: Character): Feedback {
         user.incrementEnergyPoints(3)
         return Feedback.VALID
     }
 
-    private fun vacancesEffect(user: Character) : Feedback {
+    private fun vacancesEffect(user: Character): Feedback {
         user.incrementLifePoints(2)
         user.incrementVictoryPoints(-1)
         return Feedback.VALID
     }
 
-    private fun vallsEffect(target: Character) : Feedback {
+    private fun vallsEffect(target: Character): Feedback {
         target.incrementVictoryPoints(-1)
         return Feedback.VALID
     }
