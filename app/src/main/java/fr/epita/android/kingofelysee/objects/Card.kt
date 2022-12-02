@@ -2,7 +2,7 @@ package fr.epita.android.kingofelysee.objects
 
 
 
-data class Card(val id: Int, val effect: Effect, val hasToChooseTarget: Boolean) {
+data class Card(val id: Int, val effect: Effect, val hasToChooseTarget: Boolean, val feedbackMessage: String = "") {
 
     // Only for optimization, might be totally overkill
     override fun equals(other: Any?): Boolean {
