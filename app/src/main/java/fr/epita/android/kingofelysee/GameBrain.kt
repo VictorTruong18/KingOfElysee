@@ -53,13 +53,14 @@ class GameBrain : ViewModel() {
         this.shopCards.value = Pair(cardsManager.getRandomCard(), cardsManager.getRandomCard())
     }
 
-    fun buyCard(cardNbr: Int) {
+    fun buyCard(cardNbr: Int) : Boolean {
         val currentPlayer = characters[characterTurnIndex]
-        // TODO CHECK PLAYER MONEY AND DEDUCT IT
+
         val card = if (cardNbr == 0) shopCards.value!!.first else shopCards.value!!.second
 
-        // TODO FEEDBACK
-        if (currentPlayer.cards.value!!.size >= 6) return
+        currentPlayer.incrementEnergyPoints(card.price * -1)
+
+        if (currentPlayer.cards.value!!.size >= 6) return false
 
         currentPlayer.addCard(card)
         //currentPlayer.cards.value!!.add(card)
@@ -69,6 +70,7 @@ class GameBrain : ViewModel() {
         } else {
             this.shopCards.value = Pair(this.shopCards.value!!.first, cardsManager.getRandomCard())
         }
+        return true
     }
 
     fun useShopCard(cardNbr: Int, user: Character, target: Character? = null) : Feedback {
@@ -95,6 +97,20 @@ class GameBrain : ViewModel() {
             user.removeCard(card)
         }
         return feedback
+    }
+
+    fun hasCurrentPlayerEnoughMoneyToBuyCard(cardNbr: Int) : Boolean {
+        val card = if (cardNbr == 0) shopCards.value!!.first else shopCards.value!!.second
+
+        val player = characters[characterTurnIndex]
+
+        return player.energyPoints_.value!! >= card.price
+    }
+
+    fun canCurrentPlayerRenew(renewPrice: Int) : Boolean {
+        val player = characters[characterTurnIndex]
+
+        return player.energyPoints_.value!! >= renewPrice
     }
     
     fun play(character: Character, dice: List<String>, communicator: Communicator) {

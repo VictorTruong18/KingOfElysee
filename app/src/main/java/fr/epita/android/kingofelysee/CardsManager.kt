@@ -8,90 +8,120 @@ import kotlin.random.Random
 
 class CardsManager() {
     private val cards = setOf(
-        Card(R.drawable.bad_coke, Effect.IMMEDIATE, true, "%TARGET% perd deux points de vie"),
+        Card(R.drawable.bad_coke,
+            Effect.IMMEDIATE,
+            true,
+            "%TARGET% perd deux points de vie",
+            2
+        ),
         Card(
             R.drawable.bogoss,
             Effect.DELAYED,
             false,
-            "Bravo, vous avez gagné trois votes et fait perdre un point de vie à vos adversaires !"
+            "Bravo, vous avez gagné trois votes et fait perdre un point de vie à vos adversaires !",
+            3
         ),
         Card(
             R.drawable.bollore,
             Effect.IMMEDIATE,
             false,
-            "Bravo, vous avez fait perdre un point de vie et un vote à vos adversaires !"
+            "Bravo, vous avez fait perdre un point de vie et un vote à vos adversaires !",
+            3
         ),
         Card(
             R.drawable.casseroles,
             Effect.DELAYED,
             true,
-            "Bravo, vous avez fait perdre deux votes à chaque adversaire en ayant plus que vous !"
+            "Bravo, %TARGET% avait plus de votes que vous, plus maintenant!",
+            0 // TODO CHANGE ME
         ),
         Card(R.drawable.cauchemar, Effect.IMMEDIATE, true, "%TARGET% perd un vote"),
         Card(
             R.drawable.cgt,
             Effect.DELAYED,
             true,
-            "Bravo, grâce à la CGT, vous ne vous faites plus de soucis !"
+            "Bravo, grâce à la CGT, vous ne vous faites plus de soucis !",
+            0
         ),
         Card(
             R.drawable.chinois,
             Effect.IMMEDIATE,
             false,
-            "Bravo, vous gagnez cinq sous grâce à la Chine !"
+            "Bravo, vous gagnez cinq sous grâce à la Chine !",
+            0
         ),
         Card(R.drawable.coke, Effect.IMMEDIATE, false, "Bravo, vous avez fait le plein d'énergie"),
         Card(
             R.drawable.don,
             Effect.DELAYED,
             true,
-            "Vous faites un arrangement avec %TARGET% et gagnez un de ses votes."
+            "Vous faites un arrangement avec %TARGET% et gagnez un de ses votes.",
+            1
         ),
         Card(
             R.drawable.hannounah,
             Effect.IMMEDIATE,
             false,
-            "Bravo, vous avez gagné un vote et un point de vie."
+            "Bravo, vous avez gagné un vote et un point de vie.",
+            2
         ),
         Card(
             R.drawable.inflation,
             Effect.IMMEDIATE,
             false,
-            "Bravo, tous vos adversaires perdent trois sous !"
+            "Bravo, tous vos adversaires perdent trois sous !",
+            2
         ),
         Card(
             R.drawable.interview_bfm,
             Effect.IMMEDIATE,
             false,
-            "Bravo, vous avez gagné deux votes !"
+            "Bravo, vous avez gagné deux votes !",
+            2
         ),
         Card(
             R.drawable.masque,
             Effect.IMMEDIATE,
             false,
-            "Bravo, vous gagnez deux points de vie mais perdez deux votes !"
+            "Bravo, vous gagnez deux points de vie mais perdez deux votes !",
+            0
         ),
-        Card(R.drawable.mcfly, Effect.IMMEDIATE, false, "Bravo, vous avez gagné 2 votes !"),
+        Card(R.drawable.mcfly, Effect.IMMEDIATE,
+            false,
+            "Bravo, vous avez gagné 2 votes !",
+            2
+        ),
         Card(
             R.drawable.mckinsey,
             Effect.DELAYED,
             false,
-            "Vous avez gagné un vote grâce à l'expertise de McKinsey."
+            "Vous avez gagné un vote grâce à l'expertise de McKinsey.",
+            0
         ),
         Card(
             R.drawable.perlimpimpin,
             Effect.IMMEDIATE,
             true,
-            "%TARGET% perd un vote et vous gagnez un point de vie."
+            "%TARGET% perd un vote et vous gagnez un point de vie.",
+            1
         ),
-        Card(R.drawable.pieces, Effect.IMMEDIATE, false, "Bravo, vous gagnez trois sous !"),
+        Card(R.drawable.pieces,
+            Effect.IMMEDIATE,
+            false,
+            "Bravo, vous gagnez trois sous !",
+            0),
         Card(
             R.drawable.vacances,
             Effect.IMMEDIATE,
             false,
-            "Vous gagnez deux points deux vie mais perdez un vote."
+            "Vous gagnez deux points deux vie mais perdez un vote.",
+            0
         ),
-        Card(R.drawable.valls, Effect.IMMEDIATE, true, "%TARGET% perd un vote."),
+        Card(R.drawable.valls,
+            Effect.IMMEDIATE,
+            true,
+            "%TARGET% perd un vote.",
+            1),
     )
 
     fun useCard(

@@ -4,7 +4,6 @@ import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.os.Build
 import android.os.Bundle
-import android.text.Spanned
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
@@ -46,7 +45,7 @@ class MainActivity : AppCompatActivity(), Communicator {
 
     private fun animateMainFragmentToFullScreen() {
         val profile : View = findViewById(R.id.profile_0)
-        if (defaultScrollHeight == 0)
+        if (defaultProfileHeight == 0)
             defaultProfileHeight = profile.layoutParams.height
 
         val slideAnimator: ValueAnimator = ValueAnimator
@@ -69,7 +68,9 @@ class MainActivity : AppCompatActivity(), Communicator {
         animationSet.startDelay = 200
 
         val scroll : View = findViewById(R.id.scrollView2)
-        defaultScrollHeight = scroll.layoutParams.height
+        if (defaultScrollHeight == 0)
+            defaultScrollHeight = scroll.layoutParams.height
+
         val slideAnimator2: ValueAnimator = ValueAnimator
             .ofInt(defaultScrollHeight, 0)
             .setDuration(1000)
