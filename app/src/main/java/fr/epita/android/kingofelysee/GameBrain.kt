@@ -1,6 +1,8 @@
 package fr.epita.android.kingofelysee
 
+import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import fr.epita.android.kingofelysee.objects.Card
@@ -49,7 +51,9 @@ class GameBrain : ViewModel() {
         return characters.filter { it != getCurrentPlayer() }
     }
 
-    fun renewShopCards() {
+    fun renewShopCards(renewPrice: Int) {
+        val currentPlayer = this.getCurrentPlayer()
+        currentPlayer.incrementEnergyPoints(renewPrice * -1)
         this.shopCards.value = Pair(cardsManager.getRandomCard(), cardsManager.getRandomCard())
     }
 
@@ -99,6 +103,7 @@ class GameBrain : ViewModel() {
     fun useCard(card: Card, target: Character? = null) : Feedback {
         val player = this.getCurrentPlayer()
         val feedback = cardsManager.useCard(card, player, target, this.characters)
+
         if (feedback == Feedback.VALID) {
             Log.d("Lounes", "Used card")
             player.removeCard(card)
@@ -179,5 +184,7 @@ class GameBrain : ViewModel() {
     fun getHillCapacity(): Int {
         return if(characters.filter { it.lifePoints_.value!! > 0 }.size > 4) 2 else 1
     }
+
+
 
 }

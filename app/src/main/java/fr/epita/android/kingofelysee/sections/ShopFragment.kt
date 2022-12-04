@@ -1,5 +1,6 @@
 package fr.epita.android.kingofelysee.sections
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
@@ -9,11 +10,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import fr.epita.android.kingofelysee.Communicator
+import fr.epita.android.kingofelysee.Feedback
+import fr.epita.android.kingofelysee.Feedback.*
 import fr.epita.android.kingofelysee.GameBrain
 import fr.epita.android.kingofelysee.R
 import fr.epita.android.kingofelysee.objects.Card
 import fr.epita.android.kingofelysee.objects.Effect
+import fr.epita.android.kingofelysee.objects.Character
 
 /**
  * A simple [Fragment] subclass.
@@ -31,6 +37,7 @@ class ShopFragment : Fragment() {
     lateinit var refreshButton: Button
 
     private val renewPrice = 2
+    private lateinit var communicator: Communicator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +48,7 @@ class ShopFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        communicator = activity as Communicator
         return inflater.inflate(R.layout.fragment_shop, container, false)
     }
 
@@ -72,11 +80,12 @@ class ShopFragment : Fragment() {
 
         refreshButton = view.findViewById(R.id.reset_shop_button)
 
-        val refreshMsg = "Renouveller (${renewPrice} \uD83D\uDCB6)"
+        val refreshMsg = "Renouveler (${renewPrice} \uD83D\uDCB6)"
         refreshButton.text = refreshMsg
 
         refreshButton.setOnClickListener {
-            gameBrain.renewShopCards()
+            gameBrain.renewShopCards(renewPrice)
+            view.requestLayout()
         }
 
         button1 = view.findViewById(R.id.shop_buy_card_1)
@@ -88,13 +97,15 @@ class ShopFragment : Fragment() {
                     val dialog = ChooseTargetDialogFragment(card, 0)
                     dialog.show(this.parentFragmentManager, "Toto")
                 } else {
-                    gameBrain.useShopCard(0)
+                    val feedback = gameBrain.useShopCard(0)
+                    communicator.displayFeedbackModal(feedback, card)
                 }
             } else {
                 if (gameBrain.buyCard(0))
-                    displayFeedbackModal("Carte ajoutée")
+                    communicator.dialog("Carte ajoutée", "Boutique")
                 else
-                    displayFeedbackModal("Vous ne pouvez pas avoir plus de 6 cartes à la fois!")
+                    communicator.dialog("Vous ne pouvez pas avoir plus de 6 cartes à la fois!", "Boutique")
+                view.requestLayout()
             }
         }
 
@@ -107,13 +118,15 @@ class ShopFragment : Fragment() {
                     val dialog = ChooseTargetDialogFragment(card, 1)
                     dialog.show(this.parentFragmentManager, "Toto")
                 } else {
-                    gameBrain.useShopCard(1)
+                    val feedback = gameBrain.useShopCard(1)
+                    communicator.displayFeedbackModal(feedback, card)
                 }
             } else {
                 if (gameBrain.buyCard(1))
-                    displayFeedbackModal("Carte ajoutée")
+                    communicator.dialog("Carte ajoutée", "Boutique")
                 else
-                    displayFeedbackModal("Vous ne pouvez pas avoir plus de 6 cartes à la fois!")
+                    communicator.dialog("Vous ne pouvez pas avoir plus de 6 cartes à la fois!", "Boutique")
+                view.requestLayout()
             }
         }
     }
@@ -126,23 +139,5 @@ class ShopFragment : Fragment() {
 
         view.findViewById<ImageView>(R.id.card1Image).setImageResource(this.card1.id)
         view.findViewById<ImageView>(R.id.card2Image).setImageResource(this.card2.id)
-    }
-
-    private fun displayFeedbackModal(msg: String) {
-        activity?.let {
-            val builder = AlertDialog.Builder(it)
-            builder.apply {
-                setPositiveButton(
-                    "Ok"
-                ) { _, _ ->
-                }
-            }
-            builder.setMessage(msg)
-                .setTitle("Boutique")
-
-            // Create the AlertDialog
-            builder.create()
-            builder.show()
-        }
     }
 }

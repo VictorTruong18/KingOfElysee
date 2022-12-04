@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import fr.epita.android.kingofelysee.Communicator
 import fr.epita.android.kingofelysee.GameBrain
 import fr.epita.android.kingofelysee.R
 
@@ -18,6 +19,7 @@ import fr.epita.android.kingofelysee.R
  */
 class MyCardsFragment : Fragment() {
     private val gameBrain: GameBrain by activityViewModels()
+    private lateinit var communicator: Communicator
 
     private lateinit var layoutImageButton : List<Triple<LinearLayout, ImageView, Button>>
 
@@ -30,6 +32,7 @@ class MyCardsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        communicator = activity as Communicator
         return inflater.inflate(R.layout.fragment_my_cards, container, false)
     }
 
@@ -55,7 +58,8 @@ class MyCardsFragment : Fragment() {
                         val dialog = ChooseTargetDialogFragment(card, null)
                         dialog.show(this.parentFragmentManager, "Toto")
                     } else {
-                        gameBrain.useCard(card)
+                        val feedback = gameBrain.useCard(card)
+                        communicator.displayFeedbackModal(feedback, card)
                     }
                 }
             }

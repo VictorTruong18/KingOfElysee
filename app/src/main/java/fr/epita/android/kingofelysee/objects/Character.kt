@@ -42,7 +42,7 @@ class Character(
         } else if (this.lifePoints_.value!! + lifepoints < 0) {
             lf = this.lifePoints_.value!! * -1
         }
-        this.lifePoints_.postValue(this.lifePoints_.value!!.plus(lf))
+        this.lifePoints_.value = this.lifePoints_.value!!.plus(lf)
         return lf
     }
 
@@ -51,8 +51,8 @@ class Character(
         if (this.energyPoints_.value!! + energypoints < 0) {
             en = this.energyPoints_.value!! * -1
         }
-        this.energyPoints_.postValue(this.energyPoints_.value!!.plus(en))
-        return energypoints
+        this.energyPoints_.value = this.energyPoints_.value!!.plus(en)
+        return en
     }
 
     fun incrementVictoryPoints(victorypoints : Int): Int{
@@ -62,7 +62,7 @@ class Character(
         } else if (this.victoryPoints_.value!! + victorypoints < 0) {
             vt = this.victoryPoints_.value!! * -1
         }
-        this.victoryPoints_.postValue(this.victoryPoints_.value!!.plus(vt))
+        this.victoryPoints_.value = this.victoryPoints_.value!!.plus(vt)
         return vt
     }
 
