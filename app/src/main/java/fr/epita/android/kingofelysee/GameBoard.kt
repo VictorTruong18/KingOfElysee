@@ -23,6 +23,7 @@ import fr.epita.android.kingofelysee.sections.MapFragment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import fr.epita.android.kingofelysee.objects.Character
+import kotlin.system.exitProcess
 
 
 class GameBoard : Fragment() {
@@ -47,8 +48,8 @@ class GameBoard : Fragment() {
                     setPositiveButton(
                         "Quitter"
                     ) { _, _ ->
-                        requireActivity().viewModelStore.clear()
-                        findNavController().navigate(R.id.action_gameBoard_to_gameMenu)
+                        requireActivity().finish()
+                        exitProcess(0)
                     }
                     setNegativeButton(
                         "Annuler"
@@ -142,6 +143,7 @@ class GameBoard : Fragment() {
                 while (gameBrain.partyStarted) {
 
                     val character = gameBrain.characters[gameBrain.characterTurnIndex]
+                    gameBrain.waitNext.value = gameBrain.waitNext.value
                     // If you open the app you receive this message
 
                     if(gameBrain.nbTurn == 0){
@@ -169,7 +171,7 @@ class GameBoard : Fragment() {
                     // Whose turn is it ?
                     // Is he Alive ?
                     if (character.lifePoints_.value!! > 0) {
-                        if(character.onTheHill_) {
+                        if(character.onTheHill_ && gameBrain.nbTurn/gameBrain.characters.size > 0) {
                             character.incrementVictoryPoints(2)
                             gameBrain.hillTurn = gameBrain.nbTurn
                         }

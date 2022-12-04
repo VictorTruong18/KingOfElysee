@@ -1,6 +1,8 @@
 package fr.epita.android.kingofelysee
 
+import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import fr.epita.android.kingofelysee.objects.Card
@@ -49,32 +51,42 @@ class GameBrain : ViewModel() {
         return characters.filter { it != getCurrentPlayer() }
     }
 
-    fun renewShopCards() {
+    fun renewShopCards(renewPrice: Int) {
+        val currentPlayer = this.getCurrentPlayer()
+        currentPlayer.incrementEnergyPoints(renewPrice * -1)
         this.shopCards.value = Pair(cardsManager.getRandomCard(), cardsManager.getRandomCard())
     }
 
-    fun buyCard(cardNbr: Int) {
-        val currentPlayer = characters[characterTurnIndex]
-        // TODO CHECK PLAYER MONEY AND DEDUCT IT
+    fun buyCard(cardNbr: Int) : Boolean {
+        val currentPlayer = this.getCurrentPlayer()
+
         val card = if (cardNbr == 0) shopCards.value!!.first else shopCards.value!!.second
 
-        // TODO FEEDBACK
-        if (currentPlayer.cards.value!!.size >= 6) return
+        currentPlayer.incrementEnergyPoints(card.price * -1)
+
+        if (currentPlayer.cards.value!!.size >= 6) return false
 
         currentPlayer.addCard(card)
-        //currentPlayer.cards.value!!.add(card)
 
         if (cardNbr == 0) {
             this.shopCards.value = Pair(cardsManager.getRandomCard(), this.shopCards.value!!.second)
         } else {
             this.shopCards.value = Pair(this.shopCards.value!!.first, cardsManager.getRandomCard())
         }
+        return true
     }
 
-    fun useShopCard(cardNbr: Int, user: Character, target: Character? = null) : Feedback {
+    fun useShopCard(cardNbr: Int, target: Character? = null) : Feedback {
+        val currentPlayer = this.getCurrentPlayer()
+
         val card = if (cardNbr == 0) shopCards.value!!.first else shopCards.value!!.second
 
-        val feedback = cardsManager.useCard(card, user, target, this.characters)
+        if (currentPlayer.energyPoints_.value!! < card.price)
+            return Feedback.USER_NOT_ENOUGH_ENERGY
+
+        currentPlayer.incrementEnergyPoints(card.price * -1)
+
+        val feedback = cardsManager.useCard(card, currentPlayer, target, this.characters)
 
         if (feedback == Feedback.VALID) {
             if (cardNbr == 0) {
@@ -88,13 +100,29 @@ class GameBrain : ViewModel() {
         return feedback
     }
 
-    fun useCard(card: Card, user: Character, target: Character? = null) : Feedback {
-        val feedback = cardsManager.useCard(card, user, target, this.characters)
+    fun useCard(card: Card, target: Character? = null) : Feedback {
+        val player = this.getCurrentPlayer()
+        val feedback = cardsManager.useCard(card, player, target, this.characters)
+
         if (feedback == Feedback.VALID) {
             Log.d("Lounes", "Used card")
-            user.removeCard(card)
+            player.removeCard(card)
         }
         return feedback
+    }
+
+    fun hasCurrentPlayerEnoughMoneyToBuyCard(cardNbr: Int) : Boolean {
+        val card = if (cardNbr == 0) shopCards.value!!.first else shopCards.value!!.second
+
+        val player = characters[characterTurnIndex]
+
+        return player.energyPoints_.value!! >= card.price
+    }
+
+    fun canCurrentPlayerRenew(renewPrice: Int) : Boolean {
+        val player = characters[characterTurnIndex]
+
+        return player.energyPoints_.value!! >= renewPrice
     }
     
     fun play(character: Character, dice: List<String>, communicator: Communicator) {
@@ -156,5 +184,7 @@ class GameBrain : ViewModel() {
     fun getHillCapacity(): Int {
         return if(characters.filter { it.lifePoints_.value!! > 0 }.size > 4) 2 else 1
     }
+
+
 
 }

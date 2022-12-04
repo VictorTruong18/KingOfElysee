@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import fr.epita.android.kingofelysee.Communicator
 import fr.epita.android.kingofelysee.GameBrain
 import fr.epita.android.kingofelysee.R
 
@@ -18,8 +19,9 @@ import fr.epita.android.kingofelysee.R
  */
 class MyCardsFragment : Fragment() {
     private val gameBrain: GameBrain by activityViewModels()
+    private lateinit var communicator: Communicator
 
-    private lateinit var imagesAndButtons : List<Pair<ImageView, Button>>
+    private lateinit var layoutImageButton : List<Triple<LinearLayout, ImageView, Button>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,37 +32,43 @@ class MyCardsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        communicator = activity as Communicator
         return inflater.inflate(R.layout.fragment_my_cards, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        imagesAndButtons = listOf(
-            Pair(view.findViewById(R.id.card_image_1), view.findViewById(R.id.card_button_1)),
-            Pair(view.findViewById(R.id.card_image_2), view.findViewById(R.id.card_button_2)),
-            Pair(view.findViewById(R.id.card_image_3), view.findViewById(R.id.card_button_3)),
-            Pair(view.findViewById(R.id.card_image_4), view.findViewById(R.id.card_button_4)),
-            Pair(view.findViewById(R.id.card_image_5), view.findViewById(R.id.card_button_5)),
-            Pair(view.findViewById(R.id.card_image_6), view.findViewById(R.id.card_button_6)),
+        layoutImageButton = listOf(
+            Triple(view.findViewById(R.id.layout1), view.findViewById(R.id.card_image_1), view.findViewById(R.id.card_button_1)),
+            Triple(view.findViewById(R.id.layout2), view.findViewById(R.id.card_image_2), view.findViewById(R.id.card_button_2)),
+            Triple(view.findViewById(R.id.layout3), view.findViewById(R.id.card_image_3), view.findViewById(R.id.card_button_3)),
+            Triple(view.findViewById(R.id.layout4), view.findViewById(R.id.card_image_4), view.findViewById(R.id.card_button_4)),
+            Triple(view.findViewById(R.id.layout5), view.findViewById(R.id.card_image_5), view.findViewById(R.id.card_button_5)),
+            Triple(view.findViewById(R.id.layout6), view.findViewById(R.id.card_image_6), view.findViewById(R.id.card_button_6)),
         )
 
+        // Every time the cards list change and the view is visible,
+        // we show the new cards and hide the old ones
         val player = gameBrain.characters[gameBrain.characterTurnIndex]
         player.cards.observe(this.viewLifecycleOwner) {
             it.forEachIndexed { i, card ->
-                imagesAndButtons[i].first.setImageResource(card.id)
-                imagesAndButtons[i].second.setOnClickListener {
+                layoutImageButton[i].first.visibility = View.VISIBLE
+                layoutImageButton[i].second.setImageResource(card.id)
+                layoutImageButton[i].third.setOnClickListener {
                     if (card.hasToChooseTarget) {
                         val dialog = ChooseTargetDialogFragment(card, null)
                         dialog.show(this.parentFragmentManager, "Toto")
                     } else {
-                        gameBrain.useCard(card, player)
+                        val feedback = gameBrain.useCard(card)
+                        communicator.displayFeedbackModal(feedback, card)
                     }
                 }
-
-                imagesAndButtons.subList(it.size, imagesAndButtons.size).forEach { pair ->
-                    pair.first.visibility = View.GONE
-                    pair.second.visibility = View.GONE
-                }
             }
+
+            layoutImageButton.subList(it.size, layoutImageButton.size).forEach { triple ->
+                triple.first.visibility = View.GONE
+            }
+
+            view.requestLayout()
         }
 
 

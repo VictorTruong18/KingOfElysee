@@ -1,7 +1,6 @@
 package fr.epita.android.kingofelysee
-import android.text.Spanned
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
+
+import fr.epita.android.kingofelysee.objects.Card
 import fr.epita.android.kingofelysee.objects.Character
 
 interface Communicator {
@@ -20,5 +19,7 @@ interface Communicator {
     fun loadMap()
 
     fun dialog(message: String, title: String, resumeGame: Boolean = false)
+
+    fun displayFeedbackModal(feedback: Feedback, card: Card, target: Character? = null)
 
 }
