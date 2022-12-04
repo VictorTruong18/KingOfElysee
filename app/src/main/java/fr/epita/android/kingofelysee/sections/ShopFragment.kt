@@ -30,7 +30,7 @@ class ShopFragment : Fragment() {
     lateinit var button2: Button
     lateinit var refreshButton: Button
 
-    private val renewPrice = 0 // TODO CHANGE ME
+    private val renewPrice = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
