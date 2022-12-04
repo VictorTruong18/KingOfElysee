@@ -52,7 +52,7 @@ class GameDice : Fragment() {
 
         for (i in allDices.indices) {
             allDices[i].setOnClickListener {
-                if(lockDices[i] == 1){
+                if(lockDices[i] != -1){
                     it.alpha = 1F
                     lockDices[i] = -1
                 } else {

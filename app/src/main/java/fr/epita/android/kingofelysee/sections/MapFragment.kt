@@ -78,7 +78,7 @@ class MapFragment : Fragment() {
             }
             val character = gameBrain.characters[gameBrain.characterTurnIndex]
             val player = gameBrain.characters.filter { c -> c.isThePlayer_ }.first()
-            if(character.isThePlayer_&& gameBrain.nbTurn > 0){
+            if(character.isThePlayer_ && gameBrain.nbTurn > 0){
                 if(character.onTheHill_){
                     hillBtn.visibility = View.VISIBLE
                     hillBtn.text = "Démissionner"
