@@ -55,7 +55,7 @@ class MyCardsFragment : Fragment() {
                         val dialog = ChooseTargetDialogFragment(card, null)
                         dialog.show(this.parentFragmentManager, "Toto")
                     } else {
-                        gameBrain.useCard(card, player)
+                        gameBrain.useCard(card)
                     }
                 }
             }

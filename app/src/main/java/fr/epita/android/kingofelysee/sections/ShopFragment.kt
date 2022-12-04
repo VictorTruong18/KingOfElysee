@@ -30,7 +30,7 @@ class ShopFragment : Fragment() {
     lateinit var button2: Button
     lateinit var refreshButton: Button
 
-    private val renewPrice = 2
+    private val renewPrice = 0 // TODO CHANGE ME
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,16 +47,17 @@ class ShopFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         gameBrain.shopCards.observe(this.viewLifecycleOwner) {
-            val cards = gameBrain.shopCards
-
-            this.card1 = cards.value!!.first
-            this.card2 = cards.value!!.second
+            this.card1 = it.first
+            this.card2 = it.second
 
             view.findViewById<ImageView>(R.id.card1Image).setImageResource(this.card1.id)
             view.findViewById<ImageView>(R.id.card2Image).setImageResource(this.card2.id)
 
             button1.isEnabled = gameBrain.hasCurrentPlayerEnoughMoneyToBuyCard(0)
             button2.isEnabled = gameBrain.hasCurrentPlayerEnoughMoneyToBuyCard(1)
+
+            Log.d("Lounes", "Button1 ${button1.isEnabled}")
+            Log.d("Lounes", "Button2 ${button2.isEnabled}")
 
             val card1msg = "Acheter (" + if (card1.price == 0) { "GRATUIT" } else { "${card1.price}\uD83D\uDCB6" } + ")"
             val card2msg = "Acheter (" + if (card2.price == 0) { "GRATUIT" } else { "${card2.price}\uD83D\uDCB6" } + ")"
@@ -65,6 +66,8 @@ class ShopFragment : Fragment() {
             button2.text = card2msg
 
             refreshButton.isEnabled = gameBrain.canCurrentPlayerRenew(renewPrice)
+
+            view.requestLayout()
         }
 
         refreshButton = view.findViewById(R.id.reset_shop_button)
@@ -80,13 +83,12 @@ class ShopFragment : Fragment() {
 
         button1.setOnClickListener {
             val card = gameBrain.shopCards.value!!.first
-            val player = gameBrain.characters[gameBrain.characterTurnIndex]
             if (card.effect == Effect.IMMEDIATE) {
                 if (card.hasToChooseTarget) {
                     val dialog = ChooseTargetDialogFragment(card, 0)
                     dialog.show(this.parentFragmentManager, "Toto")
                 } else {
-                    gameBrain.useShopCard(0, player)
+                    gameBrain.useShopCard(0)
                 }
             } else {
                 if (gameBrain.buyCard(0))
@@ -100,17 +102,18 @@ class ShopFragment : Fragment() {
 
         button2.setOnClickListener {
             val card = gameBrain.shopCards.value!!.second
-            val player = gameBrain.characters[gameBrain.characterTurnIndex]
             if (card.effect == Effect.IMMEDIATE) {
                 if (card.hasToChooseTarget) {
                     val dialog = ChooseTargetDialogFragment(card, 1)
                     dialog.show(this.parentFragmentManager, "Toto")
                 } else {
-                    gameBrain.useShopCard(1, player)
+                    gameBrain.useShopCard(1)
                 }
             } else {
-                gameBrain.buyCard(1)
-                displayFeedbackModal("Carte ajoutée")
+                if (gameBrain.buyCard(1))
+                    displayFeedbackModal("Carte ajoutée")
+                else
+                    displayFeedbackModal("Vous ne pouvez pas avoir plus de 6 cartes à la fois!")
             }
         }
     }

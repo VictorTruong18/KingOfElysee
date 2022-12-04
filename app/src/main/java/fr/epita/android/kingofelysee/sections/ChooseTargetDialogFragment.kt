@@ -25,14 +25,12 @@ class ChooseTargetDialogFragment(private val card: Card, private val fromShop: I
                         if (fromShop != null) {
                             val feedback = gameBrain.useShopCard(
                                 fromShop,
-                                gameBrain.getCurrentPlayer(),
                                 gameBrain.getPlayersWithoutCurrentPlayer()[which]
                             )
                             displayFeedbackMessage(feedback, card, gameBrain.getPlayersWithoutCurrentPlayer()[which])
                         } else {
                             val feedback = gameBrain.useCard(
                                 card,
-                                gameBrain.getCurrentPlayer(),
                                 gameBrain.getPlayersWithoutCurrentPlayer()[which]
                             )
                             gameBrain.getCurrentPlayer().removeCard(card)

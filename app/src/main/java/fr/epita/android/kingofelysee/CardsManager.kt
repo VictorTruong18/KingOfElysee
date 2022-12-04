@@ -33,7 +33,7 @@ class CardsManager() {
             Effect.DELAYED,
             true,
             "Bravo, %TARGET% avait plus de votes que vous, plus maintenant!",
-            0 // TODO CHANGE ME
+            2
         ),
         Card(R.drawable.cauchemar, Effect.IMMEDIATE, true, "%TARGET% perd un vote"),
         Card(

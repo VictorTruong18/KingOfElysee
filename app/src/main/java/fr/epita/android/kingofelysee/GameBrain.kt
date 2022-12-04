@@ -54,7 +54,7 @@ class GameBrain : ViewModel() {
     }
 
     fun buyCard(cardNbr: Int) : Boolean {
-        val currentPlayer = characters[characterTurnIndex]
+        val currentPlayer = this.getCurrentPlayer()
 
         val card = if (cardNbr == 0) shopCards.value!!.first else shopCards.value!!.second
 
@@ -63,7 +63,6 @@ class GameBrain : ViewModel() {
         if (currentPlayer.cards.value!!.size >= 6) return false
 
         currentPlayer.addCard(card)
-        //currentPlayer.cards.value!!.add(card)
 
         if (cardNbr == 0) {
             this.shopCards.value = Pair(cardsManager.getRandomCard(), this.shopCards.value!!.second)
@@ -73,10 +72,17 @@ class GameBrain : ViewModel() {
         return true
     }
 
-    fun useShopCard(cardNbr: Int, user: Character, target: Character? = null) : Feedback {
+    fun useShopCard(cardNbr: Int, target: Character? = null) : Feedback {
+        val currentPlayer = this.getCurrentPlayer()
+
         val card = if (cardNbr == 0) shopCards.value!!.first else shopCards.value!!.second
 
-        val feedback = cardsManager.useCard(card, user, target, this.characters)
+        if (currentPlayer.energyPoints_.value!! < card.price)
+            return Feedback.USER_NOT_ENOUGH_ENERGY
+
+        currentPlayer.incrementEnergyPoints(card.price * -1)
+
+        val feedback = cardsManager.useCard(card, currentPlayer, target, this.characters)
 
         if (feedback == Feedback.VALID) {
             if (cardNbr == 0) {
@@ -90,11 +96,12 @@ class GameBrain : ViewModel() {
         return feedback
     }
 
-    fun useCard(card: Card, user: Character, target: Character? = null) : Feedback {
-        val feedback = cardsManager.useCard(card, user, target, this.characters)
+    fun useCard(card: Card, target: Character? = null) : Feedback {
+        val player = this.getCurrentPlayer()
+        val feedback = cardsManager.useCard(card, player, target, this.characters)
         if (feedback == Feedback.VALID) {
             Log.d("Lounes", "Used card")
-            user.removeCard(card)
+            player.removeCard(card)
         }
         return feedback
     }
